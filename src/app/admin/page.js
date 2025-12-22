@@ -1,0 +1,13 @@
+"use client";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Loading from '@/components/Loading';
+
+export default function AdminPageRedirect() {
+    const router = useRouter();
+    useEffect(() => {
+        router.push('/admin/dashboard');
+    }, [router]);
+
+    return <Loading fullScreen />;
+}

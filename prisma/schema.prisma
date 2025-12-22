@@ -1,0 +1,141 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          String    @default("BUYER")
+  phone         String?
+  properties    Property[]  @relation("AgentProperties")
+  leads         Lead[]      @relation("AgentLeads")
+  inquiries     Lead[]      @relation("BuyerInquiries")
+  reviewsReceived Review[] @relation("AgentReviews")
+  reviewsGiven    Review[] @relation("BuyerReviews")
+  appointmentsAgent Appointment[] @relation("AgentAppointments")
+  appointmentsBuyer Appointment[] @relation("BuyerAppointments")
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+  savedProperties  Property[] @relation("UserWishlist")
+  payments         Payment[] @relation("UserPayments")
+  notifications    Notification[] @relation("UserNotifications")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Appointment {
+  id          String   @id @default(cuid())
+  date        DateTime
+  status      String   @default("PENDING") // PENDING, CONFIRMED, CANCELLED, COMPLETED
+  notes       String?
+  propertyId  String
+  property    Property @relation(fields: [propertyId], references: [id])
+  buyerId     String
+  buyer       User     @relation("BuyerAppointments", fields: [buyerId], references: [id])
+  agentId     String
+  agent       User     @relation("AgentAppointments", fields: [agentId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Property {
+  id          String   @id @default(cuid())
+  title       String
+  description String 
+  price       Float
+  location    String
+  address     String?
+  type        String
+  status      String
+  beds        Int
+  baths       Int
+  area        Float
+  images      String?  // Changed Json to String for simplicity in SQLite if needed, but Json usually works. Let's try String to be safe.
+  features    String?  // Changed Json to String
+  lat         Float?
+  lng         Float?
+  agentId     String
+  agent       User     @relation("AgentProperties", fields: [agentId], references: [id])
+  leads       Lead[]
+  appointments Appointment[]
+  messages    Message[]
+  savedBy     User[]   @relation("UserWishlist")
+  payments    Payment[] @relation("PropertyCommission")
+  views       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  content     String
+  senderId    String
+  sender      User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiverId  String
+  receiver    User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  propertyId  String?
+  property    Property? @relation(fields: [propertyId], references: [id])
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  message   String 
+  status    String   @default("NEW")
+  propertyId String?
+  property   Property? @relation(fields: [propertyId], references: [id])
+  agentId    String?
+  agent      User?     @relation("AgentLeads", fields: [agentId], references: [id])
+  buyerId    String?
+  buyer      User?     @relation("BuyerInquiries", fields: [buyerId], references: [id])
+  createdAt  DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation("UserNotifications", fields: [userId], references: [id])
+  type      String   // MESSAGE, APPOINTMENT, SYSTEM
+  title     String
+  message   String
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Payment {
+  id          String   @id @default(cuid())
+  amount      Float
+  type        String   // "SUBSCRIPTION" or "COMMISSION"
+  status      String   @default("COMPLETED")
+  description String?
+  userId      String
+  user        User     @relation("UserPayments", fields: [userId], references: [id])
+  propertyId  String?
+  property    Property? @relation("PropertyCommission", fields: [propertyId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?
+  agentId   String
+  agent     User     @relation("AgentReviews", fields: [agentId], references: [id])
+  buyerId   String
+  buyer     User     @relation("BuyerReviews", fields: [buyerId], references: [id])
+  createdAt DateTime @default(now())
+}
