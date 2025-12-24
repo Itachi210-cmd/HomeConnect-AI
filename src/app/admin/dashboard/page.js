@@ -78,7 +78,9 @@ export default function AdminDashboard() {
                     <div className="lg:col-span-2">
                         <div className="card" style={{ height: '100%' }}>
                             <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '1.5rem' }}>Platform Growth</h3>
-                            <DashboardChart data={chartData} />
+                            <div style={{ height: '350px', position: 'relative' }}>
+                                <DashboardChart data={chartData} />
+                            </div>
                         </div>
                     </div>
                     <div className="card">
