@@ -91,4 +91,4 @@ Distributed under the **MIT License**. See `LICENSE` for more information.
 ---
 
 ### 👨‍💻 Developed by
-[Your Name/GitHub Handle]
+[Sujal]
