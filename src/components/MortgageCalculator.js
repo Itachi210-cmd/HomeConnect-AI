@@ -50,16 +50,17 @@ export default function MortgageCalculator({ isOpen, onClose, propertyPrice = 0 
         }} onClick={onClose}>
             <div
                 style={{
-                    background: 'white',
-                    padding: '2rem',
-                    borderRadius: '1rem',
+                    background: 'var(--background)',
+                    padding: '2.5rem',
+                    borderRadius: '2rem',
                     width: '100%',
                     maxWidth: '500px',
                     position: 'relative',
-                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+                    boxShadow: 'var(--shadow-xl)',
+                    border: '1px solid var(--border)'
                 }}
                 onClick={e => e.stopPropagation()}
-                className="animate-in fade-in zoom-in duration-300"
+                className="animate-in fade-in zoom-in duration-300 glass"
             >
                 <button
                     onClick={onClose}
@@ -68,11 +69,11 @@ export default function MortgageCalculator({ isOpen, onClose, propertyPrice = 0 
                     <X size={24} />
                 </button>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem', color: 'var(--primary)' }}>
-                    <div style={{ padding: '0.5rem', background: '#DBEAFE', borderRadius: '0.5rem' }}>
-                        <Calculator size={24} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem', color: 'var(--primary)' }}>
+                    <div style={{ padding: '0.75rem', background: 'var(--input)', borderRadius: '1rem', border: '1px solid var(--border)', color: 'var(--primary)', boxShadow: '0 0 15px rgba(99, 102, 241, 0.2)' }}>
+                        <Calculator size={28} />
                     </div>
-                    <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--foreground)' }}>Mortgage Calculator</h2>
+                    <h2 style={{ fontSize: '1.75rem', fontWeight: '900', color: 'var(--foreground)', letterSpacing: '-0.02em' }}>Mortgage Calculator</h2>
                 </div>
 
                 <div style={{ display: 'grid', gap: '1rem' }}>
@@ -107,15 +108,16 @@ export default function MortgageCalculator({ isOpen, onClose, propertyPrice = 0 
                     </div>
 
                     <div style={{
-                        marginTop: '1.5rem',
-                        padding: '1.5rem',
-                        background: 'linear-gradient(135deg, var(--primary) 0%, #2563EB 100%)',
-                        borderRadius: '0.75rem',
+                        marginTop: '2rem',
+                        padding: '2rem',
+                        background: 'var(--gradient-primary)',
+                        borderRadius: '1.5rem',
                         color: 'white',
-                        textAlign: 'center'
+                        textAlign: 'center',
+                        boxShadow: 'var(--shadow-lg)'
                     }}>
-                        <div style={{ fontSize: '0.9rem', opacity: 0.9, marginBottom: '0.25rem' }}>Estimated Monthly Payment</div>
-                        <div style={{ fontSize: '2rem', fontWeight: 'bold' }}>
+                        <div style={{ fontSize: '0.95rem', opacity: 0.9, marginBottom: '0.5rem', fontWeight: '600' }}>Estimated Monthly Payment</div>
+                        <div style={{ fontSize: '2.5rem', fontWeight: '900' }}>
                             {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(monthlyPayment)}
                         </div>
                     </div>

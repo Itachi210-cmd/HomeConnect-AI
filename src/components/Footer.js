@@ -3,7 +3,7 @@ import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, ArrowRight
 
 export default function Footer() {
     return (
-        <footer style={{ background: 'var(--foreground)', color: 'white', paddingTop: '5rem', paddingBottom: '2rem', marginTop: 'auto' }}>
+        <footer style={{ background: '#0F172A', color: 'white', paddingTop: '5rem', paddingBottom: '2rem', marginTop: 'auto', borderTop: '1px solid var(--border)' }}>
             <div className="container">
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '4rem', marginBottom: '4rem' }}>
                     {/* Brand */}

@@ -19,31 +19,47 @@ function MapUpdater({ properties }) {
     const map = useMap();
 
     useEffect(() => {
-        if (properties.length > 0) {
-            const bounds = L.latLngBounds(properties.map(p => [p.lat || 0, p.lng || 0]));
-            map.fitBounds(bounds, { padding: [50, 50] });
+        if (!map || properties.length === 0) return;
+
+        try {
+            const validProps = properties.filter(p => p.lat && p.lng);
+            if (validProps.length === 0) return;
+
+            const bounds = L.latLngBounds(validProps.map(p => [p.lat, p.lng]));
+            map.fitBounds(bounds, { padding: [50, 50], animate: true });
+        } catch (e) {
+            console.error("Leaflet bounds error:", e);
         }
     }, [properties, map]);
 
     return null;
 }
 
-export default function Map({ properties = [] }) {
+export default function Map({ properties = [], center: initialCenter, zoom: initialZoom }) {
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
+        return () => setIsMounted(false);
     }, []);
 
     if (!isMounted) {
-        return <div style={{ height: '100%', width: '100%', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading Map...</div>;
+        return <div style={{ height: '100%', width: '100%', background: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 'var(--radius)' }}>
+            <div className="animate-pulse" style={{ color: '#94A3B8', fontWeight: '500' }}>Initializing Map...</div>
+        </div>;
     }
 
     // Default center (Mumbai)
-    const center = [19.0760, 72.8777];
+    const center = initialCenter || [19.0760, 72.8777];
+    const zoom = initialZoom || 11;
 
     return (
-        <MapContainer center={center} zoom={10} style={{ height: '100%', width: '100%', borderRadius: 'var(--radius)' }}>
+        <MapContainer
+            center={center}
+            zoom={zoom}
+            style={{ height: '100%', width: '100%', borderRadius: 'inherit' }}
+            scrollWheelZoom={false}
+        >
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -56,10 +72,14 @@ export default function Map({ properties = [] }) {
                     icon={icon}
                 >
                     <Popup>
-                        <div style={{ minWidth: '200px' }}>
-                            <img src={property.image} alt={property.title} style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '4px', marginBottom: '0.5rem' }} />
-                            <h3 style={{ fontWeight: 'bold', fontSize: '0.875rem', marginBottom: '0.25rem' }}>{property.title}</h3>
-                            <p style={{ margin: 0, color: 'var(--primary)', fontWeight: '600' }}>{property.price}</p>
+                        <div style={{ minWidth: '200px', padding: '4px' }}>
+                            <img
+                                src={property.images?.[0] || property.image || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"}
+                                alt={property.title}
+                                style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '12px', marginBottom: '8px' }}
+                            />
+                            <h3 style={{ fontWeight: '800', fontSize: '0.9rem', marginBottom: '4px', color: '#0F172A' }}>{property.title}</h3>
+                            <p style={{ margin: 0, color: 'var(--primary)', fontWeight: 'bold' }}>{property.location}</p>
                         </div>
                     </Popup>
                 </Marker>

@@ -35,7 +35,6 @@ export function LeadProvider({ children }) {
             });
             if (res.ok) {
                 const newLead = await res.json();
-                // Optimistically update if we are viewing the list, but for public user it doesn't matter
                 setLeads(prev => [newLead, ...prev]);
                 return { success: true };
             }
@@ -46,19 +45,37 @@ export function LeadProvider({ children }) {
         }
     };
 
-    const updateLeadStatus = async (id, newStatus) => {
+    const addLeads = async (newLeads) => {
+        let successCount = 0;
+        for (const lead of newLeads) {
+            const res = await addLead(lead);
+            if (res.success) successCount++;
+        }
+        await fetchLeads(); // Refresh the list
+        return successCount;
+    };
+
+    const updateLead = async (id, updatedData) => {
         try {
             const res = await fetch(`/api/leads/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: newStatus })
+                body: JSON.stringify(updatedData)
             });
             if (res.ok) {
-                setLeads(leads.map(lead => lead.id === id ? { ...lead, status: newStatus } : lead));
+                const updatedLead = await res.json();
+                setLeads(prev => prev.map(lead => lead.id === id ? updatedLead : lead));
+                return { success: true };
             }
+            return { success: false };
         } catch (error) {
-            console.error("Error updating lead status:", error);
+            console.error("Error updating lead:", error);
+            return { success: false };
         }
+    };
+
+    const updateLeadStatus = async (id, newStatus) => {
+        await updateLead(id, { status: newStatus });
     };
 
     const deleteLead = async (id) => {
@@ -75,7 +92,7 @@ export function LeadProvider({ children }) {
     };
 
     return (
-        <LeadContext.Provider value={{ leads, addLead, updateLeadStatus, deleteLead, fetchLeads, loading }}>
+        <LeadContext.Provider value={{ leads, addLead, addLeads, updateLead, updateLeadStatus, deleteLead, fetchLeads, loading }}>
             {children}
         </LeadContext.Provider>
     );

@@ -47,6 +47,55 @@
   --glass-border: rgba(255, 255, 255, 0.3);
 }
 
+/* Hyper-Premium "Elite" Dark Mode */
+.dark-mode {
+  --background: #020617;
+  /* Darkest Slate */
+  --foreground: #F8FAFC;
+  /* Slate 50 */
+  --muted: #94A3B8;
+  /* Slate 400 */
+  --border: #1E293B;
+  /* Slate 800 */
+  --input: #0F172A;
+  /* Slate 900 */
+
+  --primary: #6366F1;
+  /* Indigo 500 - Brighter for Dark */
+  --primary-light: #818CF8;
+  --primary-dark: #4F46E5;
+
+  --secondary: #10B981;
+  --accent: #F59E0B;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.6), 0 4px 6px -4px rgb(0 0 0 / 0.6);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.7), 0 8px 10px -6px rgb(0 0 0 / 0.7);
+
+  --gradient-surface: linear-gradient(180deg, #0F172A 0%, #020617 100%);
+  --glass-bg: rgba(15, 23, 42, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.dark-mode .card {
+  background: var(--input);
+  border-color: var(--border);
+}
+
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+  background: var(--input);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+
 
 * {
   box-sizing: border-box;
@@ -149,27 +198,86 @@ button {
   border-color: var(--primary-light);
 }
 
+/* Glassmorphism Refinement */
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
 }
 
-.glass-dark {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
+/* Neon Glows for Dark Mode */
+.dark-mode .btn-primary {
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+}
+
+.dark-mode .btn-primary:hover {
+  box-shadow: 0 0 25px rgba(99, 102, 241, 0.6);
+  transform: translateY(-2px);
+}
+
+.dark-mode .card:hover {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+  border-color: var(--primary);
+}
+
+/* Elite Text Gradient in Dark Mode */
+.dark-mode .text-gradient {
+  background: linear-gradient(135deg, #A5B4FC 0%, #6366F1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  /* Consistency with standard property */
+  -webkit-text-fill-color: transparent;
 }
 
 .text-gradient {
   background: var(--gradient-primary);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  /* Consistency with standard property */
+  -webkit-text-fill-color: transparent;
+}
+
+/* More Aggressive Dark Mode Reset */
+.dark-mode * {
+  border-color: var(--border) !important;
+}
+
+.dark-mode div[style*="background: white"],
+.dark-mode div[style*="background: #FFFFFF"],
+.dark-mode div[style*="background-color: white"],
+.dark-mode div[style*="background-color: #FFFFFF"],
+.dark-mode section[style*="background: white"],
+.dark-mode aside[style*="background: white"],
+.dark-mode header[style*="background: white"] {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+.dark-mode .bg-white,
+.dark-mode .bg-slate-50,
+.dark-mode .bg-gray-50 {
+  background-color: var(--background) !important;
+}
+
+.dark-mode .text-slate-900,
+.dark-mode .text-gray-900,
+.dark-mode .text-black {
+  color: var(--foreground) !important;
+}
+
+.dark-mode .text-slate-500,
+.dark-mode .text-gray-500 {
+  color: var(--muted) !important;
+}
+
+.dark-mode table tr {
+  border-bottom-color: var(--border) !important;
+}
+
+.dark-mode table th {
+  color: var(--muted) !important;
 }
 
 /* Animations */
@@ -205,15 +313,15 @@ button {
 
 @keyframes skeleton-pulse {
   0% {
-    background-color: #f1f5f9;
+    background-color: var(--input);
   }
 
   50% {
-    background-color: #e2e8f0;
+    background-color: var(--border);
   }
 
   100% {
-    background-color: #f1f5f9;
+    background-color: var(--input);
   }
 }
 

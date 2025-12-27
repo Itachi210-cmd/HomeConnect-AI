@@ -91,6 +91,14 @@ export default function DashboardChart({ type = 'line', data, options }) {
                     tension: 0.4
                 };
             }
+            if (dataset.isProjected) {
+                return {
+                    ...dataset,
+                    borderDash: [5, 5],
+                    pointStyle: 'circle',
+                    pointRadius: 4,
+                };
+            }
             return dataset;
         })
     };

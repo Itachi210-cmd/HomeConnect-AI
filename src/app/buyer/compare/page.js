@@ -6,7 +6,11 @@ import Button from '@/components/Button';
 import FadeIn from '@/components/FadeIn';
 
 export default function ComparePage() {
-    const { compareList, toggleCompare, parsePrice } = useProperties();
+    const { compareList, toggleCompare, parsePrice, formatPrice } = useProperties();
+
+    const handleImageError = (e) => {
+        e.target.src = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80";
+    };
 
     if (compareList.length === 0) {
         return (
@@ -54,6 +58,7 @@ export default function ComparePage() {
                             </button>
                             <img
                                 src={item.images?.[0] || item.image || "https://images.unsplash.com/photo-1600596542815-2251c3052068"}
+                                onError={handleImageError}
                                 style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '12px', marginBottom: '1rem' }}
                             />
                             <div style={{ fontWeight: '800', fontSize: '1.1rem' }}>{item.title}</div>
@@ -64,7 +69,7 @@ export default function ComparePage() {
                     <div className="compare-label">Price</div>
                     {compareList.map(item => (
                         <div key={item.id} className="compare-value" style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--primary)' }}>
-                            ₹{typeof item.price === 'number' ? item.price.toLocaleString('en-IN') : item.price}
+                            {formatPrice(item.price)}
                         </div>
                     ))}
 

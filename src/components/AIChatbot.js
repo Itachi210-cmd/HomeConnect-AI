@@ -52,64 +52,96 @@ export default function AIChatbot() {
     };
 
     return (
-        <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 1000, fontFamily: 'var(--font-geist-sans)' }}>
+        <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 1000 }}>
             {/* Chat Window */}
             {isOpen && (
-                <div className="animate-in fade-in slide-in-from-bottom-5 duration-300" style={{
-                    width: '350px',
-                    height: '500px',
-                    background: 'white',
-                    borderRadius: '1rem',
-                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                    border: '1px solid var(--border)',
+                <div className="animate-in fade-in slide-in-from-bottom-5 duration-300 glass" style={{
+                    width: '380px',
+                    height: '550px',
+                    borderRadius: '1.5rem',
+                    boxShadow: 'var(--shadow-xl)',
                     marginBottom: '1rem',
                     display: 'flex',
                     flexDirection: 'column',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    border: '1px solid var(--glass-border)'
                 }}>
                     {/* Header */}
                     <div style={{
-                        padding: '1rem',
-                        background: 'linear-gradient(135deg, var(--primary) 0%, #2563EB 100%)',
+                        padding: '1.25rem',
+                        background: 'var(--gradient-primary)',
                         color: 'white',
                         display: 'flex',
                         justifyContent: 'space-between',
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                     }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <div style={{ background: 'rgba(255,255,255,0.2)', padding: '0.25rem', borderRadius: '0.25rem' }}>
-                                <Sparkles size={18} />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <div style={{ background: 'rgba(255,255,255,0.2)', padding: '0.4rem', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <Sparkles size={20} className="animate-pulse" />
                             </div>
-                            <span style={{ fontWeight: '600' }}>AI Assistant</span>
+                            <div>
+                                <div style={{ fontWeight: '800', fontSize: '1rem', letterSpacing: '-0.02em' }}>HomeConnect AI</div>
+                                <div style={{ fontSize: '0.7rem', opacity: 0.8, fontWeight: '500' }}>Always active • Ready to help</div>
+                            </div>
                         </div>
-                        <button onClick={() => setIsOpen(false)} style={{ color: 'white', opacity: 0.8, background: 'none', border: 'none', cursor: 'pointer' }}><X size={20} /></button>
+                        <button
+                            onClick={() => setIsOpen(false)}
+                            style={{
+                                color: 'white',
+                                opacity: 0.8,
+                                background: 'rgba(255,255,255,0.1)',
+                                border: 'none',
+                                cursor: 'pointer',
+                                width: '32px',
+                                height: '32px',
+                                borderRadius: '50%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                transition: 'all 0.2s'
+                            }}
+                            className="hover:rotate-90 hover:opacity-100"
+                        >
+                            <X size={18} />
+                        </button>
                     </div>
 
                     {/* Messages */}
-                    <div style={{ flex: 1, padding: '1rem', overflowY: 'auto', background: '#F8FAFC', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <div style={{
+                        flex: 1,
+                        padding: '1.5rem',
+                        overflowY: 'auto',
+                        background: 'transparent',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '1.25rem'
+                    }}>
                         {messages.map((msg, idx) => (
                             <div key={idx} style={{
                                 alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                                maxWidth: '80%',
-                                padding: '0.75rem 1rem',
-                                borderRadius: '1rem',
-                                borderBottomRightRadius: msg.role === 'user' ? '0' : '1rem',
-                                borderBottomLeftRadius: msg.role === 'assistant' ? '0' : '1rem',
-                                background: msg.role === 'user' ? 'var(--primary)' : 'white',
+                                maxWidth: '85%',
+                                padding: '1rem 1.25rem',
+                                borderRadius: '1.25rem',
+                                borderBottomRightRadius: msg.role === 'user' ? '0.25rem' : '1.25rem',
+                                borderBottomLeftRadius: msg.role === 'assistant' ? '0.25rem' : '1.25rem',
+                                background: msg.role === 'user' ? 'var(--primary)' : 'var(--input)',
                                 color: msg.role === 'user' ? 'white' : 'var(--foreground)',
-                                boxShadow: msg.role === 'assistant' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none',
-                                fontSize: '0.9rem',
-                                lineHeight: '1.4'
+                                boxShadow: 'var(--shadow-sm)',
+                                fontSize: '0.95rem',
+                                lineHeight: '1.5',
+                                border: `1px solid ${msg.role === 'user' ? 'var(--primary-dark)' : 'var(--border)'}`,
+                                transition: 'all 0.3s'
                             }}>
                                 {msg.content}
                             </div>
                         ))}
                         {isLoading && (
-                            <div style={{ alignSelf: 'flex-start', background: 'white', padding: '0.75rem', borderRadius: '1rem', borderBottomLeftRadius: 0, boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
-                                <div style={{ display: 'flex', gap: '0.25rem' }}>
-                                    <div className="animate-bounce" style={{ width: '6px', height: '6px', background: '#94A3B8', borderRadius: '50%' }}></div>
-                                    <div className="animate-bounce" style={{ width: '6px', height: '6px', background: '#94A3B8', borderRadius: '50%', animationDelay: '0.1s' }}></div>
-                                    <div className="animate-bounce" style={{ width: '6px', height: '6px', background: '#94A3B8', borderRadius: '50%', animationDelay: '0.2s' }}></div>
+                            <div style={{ alignSelf: 'flex-start', background: 'var(--input)', padding: '1rem', borderRadius: '1.25rem', borderBottomLeftRadius: '0.25rem', border: '1px solid var(--border)' }}>
+                                <div style={{ display: 'flex', gap: '0.4rem' }}>
+                                    {[0, 0.1, 0.2].map((delay, i) => (
+                                        <div key={i} className="animate-bounce" style={{ width: '8px', height: '8px', background: 'var(--primary)', borderRadius: '50%', animationDelay: `${delay}s`, opacity: 0.6 }}></div>
+                                    ))}
                                 </div>
                             </div>
                         )}
@@ -117,20 +149,31 @@ export default function AIChatbot() {
                     </div>
 
                     {/* Input */}
-                    <form onSubmit={handleSend} style={{ padding: '1rem', background: 'white', borderTop: '1px solid var(--border)', display: 'flex', gap: '0.5rem' }}>
+                    <form onSubmit={handleSend} style={{
+                        padding: '1.25rem',
+                        background: 'transparent',
+                        borderTop: '1px solid var(--glass-border)',
+                        display: 'flex',
+                        gap: '0.75rem'
+                    }}>
                         <input
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
-                            placeholder="Ask me anything..."
+                            placeholder="Type your message..."
                             style={{
                                 flex: 1,
-                                padding: '0.75rem',
-                                borderRadius: '0.5rem',
+                                padding: '0.875rem 1.25rem',
+                                borderRadius: '1rem',
                                 border: '1px solid var(--border)',
                                 outline: 'none',
-                                fontSize: '0.9rem'
+                                fontSize: '0.95rem',
+                                background: 'var(--input)',
+                                color: 'var(--foreground)',
+                                transition: 'border-color 0.2s',
+                                boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.05)'
                             }}
+                            className="focus:border-primary"
                         />
                         <button
                             type="submit"
@@ -138,17 +181,20 @@ export default function AIChatbot() {
                             style={{
                                 background: 'var(--primary)',
                                 color: 'white',
-                                width: '2.75rem',
-                                borderRadius: '0.5rem',
+                                width: '3.25rem',
+                                height: '3.25rem',
+                                borderRadius: '1rem',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                opacity: (!input.trim() || isLoading) ? 0.5 : 1,
                                 border: 'none',
-                                cursor: (!input.trim() || isLoading) ? 'not-allowed' : 'pointer'
+                                cursor: (!input.trim() || isLoading) ? 'not-allowed' : 'pointer',
+                                transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                                boxShadow: '0 4px 12px rgba(79, 70, 229, 0.3)'
                             }}
+                            className="hover:scale-105 active:scale-95"
                         >
-                            <Send size={18} />
+                            <Send size={20} />
                         </button>
                     </form>
                 </div>
@@ -158,27 +204,28 @@ export default function AIChatbot() {
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="hover:scale-110 shadow-lg shadow-blue-500/20"
+                    className="hover-scale"
                     style={{
-                        width: '3.5rem',
-                        height: '3.5rem',
-                        borderRadius: '50%',
-                        background: 'linear-gradient(135deg, var(--primary) 0%, #2563EB 100%)',
+                        width: '4rem',
+                        height: '4rem',
+                        borderRadius: '1.25rem',
+                        background: 'var(--gradient-primary)',
                         color: 'white',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         cursor: 'pointer',
-                        transition: 'transform 0.2s',
+                        transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
                         border: 'none',
-                        position: 'relative'
+                        position: 'relative',
+                        boxShadow: '0 10px 30px rgba(79, 70, 229, 0.4)'
                     }}
                 >
-                    <MessageSquare size={24} />
+                    <MessageSquare size={28} />
                     {/* Notification Dot */}
-                    <span style={{ position: 'absolute', top: '0', right: '0', display: 'flex', height: '0.75rem', width: '0.75rem' }}>
+                    <span style={{ position: 'absolute', top: '-4px', right: '-4px', display: 'flex', height: '1.25rem', width: '1.25rem' }}>
                         <span className="animate-ping" style={{ position: 'absolute', display: 'inline-flex', height: '100%', width: '100%', borderRadius: '50%', background: '#EF4444', opacity: 0.75 }}></span>
-                        <span style={{ position: 'relative', display: 'inline-flex', borderRadius: '50%', height: '0.75rem', width: '0.75rem', background: '#EF4444' }}></span>
+                        <span style={{ position: 'relative', display: 'inline-flex', borderRadius: '50%', height: '1.25rem', width: '1.25rem', background: '#EF4444', border: '3px solid var(--background)', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}></span>
                     </span>
                 </button>
             )}

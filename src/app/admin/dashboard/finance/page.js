@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import FadeIn from '@/components/FadeIn';
 import Loading from '@/components/Loading';
 import Button from '@/components/Button';
-import { CreditCard, CheckCircle, DollarSign, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { CreditCard, CheckCircle, DollarSign, ArrowUpRight, ArrowDownRight, Download } from 'lucide-react';
+import * as XLSX from 'xlsx';
 
 export default function FinancialManagement() {
     const [data, setData] = useState(null);
@@ -25,6 +26,22 @@ export default function FinancialManagement() {
         fetchFinance();
     }, []);
 
+    const handleExport = () => {
+        if (!data || !data.transactions) return;
+
+        const worksheet = XLSX.utils.json_to_sheet(data.transactions.map(tx => ({
+            'User': tx.user,
+            'Email': tx.email,
+            'Type': tx.type,
+            'Amount (₹)': tx.amount,
+            'Date': new Date(tx.date).toLocaleDateString(),
+            'Status': tx.status
+        })));
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
+        XLSX.writeFile(workbook, `HomeConnect_Transactions_${new Date().toISOString().split('T')[0]}.xlsx`);
+    };
+
     if (loading) return <Loading />;
     if (!data) return <div className="p-8 text-center">Failed to load financial data.</div>;
 
@@ -37,9 +54,14 @@ export default function FinancialManagement() {
     return (
         <div className="space-y-8">
             <FadeIn>
-                <div>
-                    <h1 className="text-3xl font-bold">Financial Management</h1>
-                    <p className="text-muted-foreground">Manage subscriptions, commissions, and revenue reports.</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                        <h1 className="text-3xl font-bold">Financial Management</h1>
+                        <p className="text-muted-foreground">Manage subscriptions, commissions, and revenue reports.</p>
+                    </div>
+                    <Button variant="outline" onClick={handleExport} style={{ gap: '8px' }}>
+                        <Download size={18} /> Export Report
+                    </Button>
                 </div>
             </FadeIn>
 

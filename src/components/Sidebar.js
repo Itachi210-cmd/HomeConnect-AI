@@ -10,14 +10,15 @@ export default function Sidebar({ items = [] }) {
     return (
         <aside style={{
             width: '280px',
-            background: 'white',
+            background: 'var(--background)',
             borderRight: '1px solid var(--border)',
             height: 'calc(100vh - 4rem)',
             position: 'sticky',
             top: '4rem',
             display: 'flex',
             flexDirection: 'column',
-            padding: '1.5rem'
+            padding: '1.5rem',
+            transition: 'background 0.3s ease'
         }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: 1 }}>
                 {items.map((item) => {

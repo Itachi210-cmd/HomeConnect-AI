@@ -85,17 +85,11 @@ export function PropertyProvider({ children }) {
     };
 
     const addProperties = async (newProperties) => {
-        // Bulk import: Sequentially add properties (for now)
-        // Ideally, create a bulk API endpoint
         let successCount = 0;
         for (const prop of newProperties) {
             const res = await addProperty({
                 ...prop,
                 status: prop.status || 'Active',
-                image: prop.image || "https://images.unsplash.com/photo-1600596542815-2251c3052068?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-                // Ensure array format for API
-                images: prop.image ? [prop.image] : [],
-                features: prop.features || []
             });
             if (res.success) successCount++;
         }
@@ -105,21 +99,46 @@ export function PropertyProvider({ children }) {
 
     const updateProperty = async (id, updatedData) => {
         try {
+            console.log("CONTEXT: Updating property:", id, "with data:", updatedData);
             const res = await fetch(`/api/properties/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedData)
             });
+
+            console.log("CONTEXT: Response status:", res.status);
+            console.log("CONTEXT: Response type:", res.type);
+
             if (res.ok) {
                 const savedProperty = await res.json();
                 setProperties(prev => prev.map(p => p.id === id ? savedProperty : p));
                 return { success: true };
             } else {
-                return { success: false };
+                let errorData = {};
+                try {
+                    errorData = await res.json();
+                    console.error("CONTEXT: Server error data:", errorData);
+                } catch (e) {
+                    const text = await res.text();
+                    console.error("CONTEXT: Server returned non-JSON error:", text);
+                    errorData = { error: "Non-JSON response", message: text };
+                }
+
+                return {
+                    success: false,
+                    error: errorData.error || "Server error",
+                    message: errorData.message || "",
+                    raw: errorData
+                };
             }
         } catch (error) {
-            console.error("Error updating property", error);
-            return { success: false };
+            console.error("CONTEXT: Network/Fetch Error:", error);
+            return {
+                success: false,
+                error: "Network or JSON error",
+                message: error.message,
+                stack: error.stack
+            };
         }
     };
 
@@ -134,8 +153,28 @@ export function PropertyProvider({ children }) {
             }
             return { success: false };
         } catch (error) {
-            console.error("Error deleting property", error);
+            console.error("Error deleting property", error)
             return { success: false };
+        }
+    };
+
+    const estimateValue = async (id) => {
+        try {
+            const res = await fetch(`/api/properties/${id}/valuation`, {
+                method: 'POST'
+            });
+            if (res.ok) {
+                const data = await res.json();
+                // Update local property state with new valuation
+                setProperties(prev => prev.map(p =>
+                    p.id === id ? { ...p, marketValue: data.marketValue, valuationNotes: data.valuationNotes } : p
+                ));
+                return { success: true, data };
+            }
+            return { success: false, error: "Valuation failed" };
+        } catch (error) {
+            console.error("Valuation Error:", error);
+            return { success: false, error: error.message };
         }
     };
 
@@ -189,6 +228,32 @@ export function PropertyProvider({ children }) {
         return value || 0;
     };
 
+    // Helper to format price into a user-friendly string (e.g., ₹1.5 Cr or ₹50,00,000)
+    const formatPrice = (price) => {
+        if (price === undefined || price === null || price === '' || price === 0 || price === "0") return "Price on Request";
+
+        // If it's already a formatted string (contains ₹ or textual denominations)
+        if (typeof price === 'string' && (price.includes('₹') || price.toLowerCase().includes('lakh') || price.toLowerCase().includes('cr'))) {
+            return price;
+        }
+
+        const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+        if (isNaN(numPrice)) return "Price on Request";
+
+        // For large Indian numbers, convert to Cr/Lakh for readability if it's a plain number
+        if (numPrice >= 10000000) {
+            return `₹${(numPrice / 10000000).toFixed(2)} Cr`;
+        } else if (numPrice >= 100000) {
+            return `₹${(numPrice / 100000).toFixed(2)} Lakh`;
+        }
+
+        return new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+            maximumFractionDigits: 0
+        }).format(numPrice);
+    };
+
     return (
         <PropertyContext.Provider value={{
             properties,
@@ -197,13 +262,15 @@ export function PropertyProvider({ children }) {
             addProperties,
             updateProperty,
             deleteProperty,
+            estimateValue,
             wishlist,
             toggleWishlist,
             compareList,
             toggleCompare,
             inquiries,
             addInquiry,
-            parsePrice
+            parsePrice,
+            formatPrice
         }}>
             {children}
         </PropertyContext.Provider>

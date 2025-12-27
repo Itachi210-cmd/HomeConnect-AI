@@ -2,12 +2,12 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]/route';
+import { authOptions } from "@/lib/auth";
 
 // GET: Fetch single property
 export async function GET(request, { params }) {
     try {
-        const id = params.id;
+        const { id } = await params;
         const property = await prisma.property.findUnique({
             where: { id },
             include: {
@@ -36,50 +36,68 @@ export async function GET(request, { params }) {
 
 // PUT: Update property
 export async function PUT(request, { params }) {
+    let requestData;
     try {
+        const { id } = await params;
         const session = await getServerSession(authOptions);
-        if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-        const id = params.id;
-        const data = await request.json();
+        if (!session || !session.user) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+        requestData = await request.json();
 
         // Verify ownership
         const existingProperty = await prisma.property.findUnique({ where: { id } });
-        if (!existingProperty) return NextResponse.json({ error: "Property not found" }, { status: 404 });
+        if (!existingProperty) {
+            return NextResponse.json({ error: "Property not found" }, { status: 404 });
+        }
 
-        // Check if user is the owner or an admin
-        // Note: session.user.id provided by callbacks
+        // Check ownership or admin
         if (existingProperty.agentId !== session.user.id && session.user.role !== 'ADMIN') {
             return NextResponse.json({ error: "Forbidden" }, { status: 403 });
         }
 
+        // Only include fields that exist in the model
+        const cleanedData = {
+            title: requestData.title || existingProperty.title,
+            description: requestData.description || existingProperty.description,
+            price: parseFloat(requestData.price) || existingProperty.price,
+            location: requestData.location || existingProperty.location,
+            address: requestData.address || existingProperty.address,
+            type: requestData.type || existingProperty.type,
+            status: requestData.status || existingProperty.status,
+            beds: parseInt(requestData.beds) || 0,
+            baths: parseInt(requestData.baths) || 0,
+            area: parseFloat(requestData.area) || 0,
+            additionalDetails: requestData.additionalDetails ?? existingProperty.additionalDetails,
+        };
+
+        // Handle JSON strings
+        if (requestData.images) {
+            cleanedData.images = JSON.stringify(Array.isArray(requestData.images) ? requestData.images : [requestData.images]);
+        }
+        if (requestData.features) {
+            cleanedData.features = JSON.stringify(Array.isArray(requestData.features) ? requestData.features : [requestData.features]);
+        }
+
         const updatedProperty = await prisma.property.update({
             where: { id },
-            data: {
-                title: data.title,
-                description: data.description,
-                price: parseFloat(data.price),
-                location: data.location,
-                address: data.address,
-                type: data.type,
-                status: data.status,
-                beds: parseInt(data.beds),
-                baths: parseInt(data.baths),
-                area: parseFloat(data.area),
-                images: JSON.stringify(data.images || []),
-                features: JSON.stringify(data.features || []),
-            }
+            data: cleanedData
         });
 
         return NextResponse.json({
             ...updatedProperty,
-            images: JSON.parse(updatedProperty.images),
-            features: JSON.parse(updatedProperty.features)
+            images: JSON.parse(updatedProperty.images || "[]"),
+            features: JSON.parse(updatedProperty.features || "[]")
         });
 
     } catch (error) {
-        console.error("Error updating property:", error);
-        return NextResponse.json({ error: "Failed to update property" }, { status: 500 });
+        console.error("Critical API Error:", error);
+        return NextResponse.json({
+            error: "Internal Server Error",
+            message: error.message
+        }, { status: 500 });
     }
 }
 

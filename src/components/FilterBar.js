@@ -32,9 +32,9 @@ export default function FilterBar({ onFilterChange }) {
     };
 
     return (
-        <div className="card" style={{ padding: '1rem', marginBottom: '1.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--muted)', fontSize: '0.875rem', fontWeight: '600' }}>
-                <Filter size={16} /> Advanced Filters
+        <div className="card glass" style={{ padding: '1.5rem', marginBottom: '2rem', border: '1px solid var(--border)', borderRadius: '1.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem', color: 'var(--primary)', fontSize: '0.9rem', fontWeight: '800' }}>
+                <Filter size={18} /> Advanced Filters
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem', alignItems: 'end' }}>
@@ -115,15 +115,17 @@ export default function FilterBar({ onFilterChange }) {
                             justifyContent: 'center',
                             gap: '0.5rem',
                             width: '100%',
-                            padding: '0.5rem',
-                            borderRadius: 'var(--radius)',
+                            padding: '0.65rem',
+                            borderRadius: '1rem',
                             border: '1px solid var(--border)',
-                            background: 'white',
+                            background: 'var(--input)',
                             cursor: 'pointer',
                             color: 'var(--muted)',
                             fontSize: '0.875rem',
-                            fontWeight: '500'
+                            fontWeight: '700',
+                            transition: 'all 0.2s ease'
                         }}
+                        className="hover-scale"
                     >
                         <RotateCcw size={14} /> Reset Filters
                     </button>

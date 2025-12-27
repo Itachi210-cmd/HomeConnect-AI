@@ -11,6 +11,10 @@ function MessagesContent() {
     const [selectedUser, setSelectedUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const handleImageError = (e) => {
+        e.target.src = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80";
+    };
+
     useEffect(() => {
         fetchConversations();
 
@@ -95,7 +99,12 @@ function MessagesContent() {
                                         overflow: 'hidden'
                                     }}>
                                         {conv.user.image ? (
-                                            <img src={conv.user.image} alt={conv.user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                            <img
+                                                src={conv.user.image}
+                                                alt={conv.user.name}
+                                                onError={handleImageError}
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                            />
                                         ) : (
                                             <User size={24} color="#94A3B8" />
                                         )}

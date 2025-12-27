@@ -14,6 +14,10 @@ export default function KYCVerification() {
         { id: 3, user: "Rahul Verma", role: "Agent", docType: "ID Proof", date: "1 day ago", status: "Rejected", fileUrl: null },
     ];
 
+    const handleImageError = (e) => {
+        e.target.src = "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80";
+    };
+
     return (
         <div className="space-y-6">
             <FadeIn>
@@ -70,7 +74,12 @@ export default function KYCVerification() {
                                     </div>
 
                                     <div className="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden border border-border relative group">
-                                        <img src={selectedDoc.fileUrl} alt="Document" className="w-full h-full object-cover" />
+                                        <img
+                                            src={selectedDoc.fileUrl}
+                                            alt="Document"
+                                            onError={handleImageError}
+                                            className="w-full h-full object-cover"
+                                        />
                                         <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                             <Button variant="secondary" className="flex items-center gap-2">
                                                 <Eye size={16} /> View Full Size

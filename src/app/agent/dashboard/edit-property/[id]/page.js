@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Upload } from 'lucide-react';
 import Button from '@/components/Button';
@@ -8,33 +8,64 @@ import { useProperties } from '@/context/PropertyContext';
 import Link from 'next/link';
 import ImageUpload from '@/components/ImageUpload';
 
-export default function EditPropertyPage({ params }) {
+export default function EditPropertyPage({ params: paramsPromise }) {
+    const params = use(paramsPromise);
     const router = useRouter();
-    const { properties, updateProperty } = useProperties();
+    const { properties, updateProperty, loading, parsePrice } = useProperties();
     const [formData, setFormData] = useState(null);
 
     useEffect(() => {
-        // Find property by ID
-        const property = properties.find(p => p.id === parseInt(params.id));
-        if (property) {
-            setFormData(property);
-        } else {
-            // Handle not found
-            router.push('/agent/dashboard/properties');
+        if (!loading && !formData) {
+            // Find property by ID
+            const property = properties.find(p => p.id === params.id);
+            if (property) {
+                // Initialize with property data, mapping images array to a single image for the UI
+                setFormData({
+                    ...property,
+                    image: property.images?.[0] || ''
+                });
+            } else {
+                // Handle not found
+                router.push('/agent/dashboard/properties');
+            }
         }
-    }, [params.id, properties, router]);
+    }, [params.id, properties, router, loading, formData]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        updateProperty(parseInt(params.id), formData);
-        router.push('/agent/dashboard/properties');
+
+        // Prepare data for API - ONLY send property fields, NO relation objects (like 'agent')
+        const dataToSave = {
+            title: formData.title,
+            description: formData.description,
+            price: parsePrice(String(formData.price)),
+            address: formData.address,
+            location: formData.address ? formData.address.split(',')[0].trim() : (formData.location || ''),
+            area: parseFloat(formData.area) || 0,
+            beds: parseInt(formData.beds) || 0,
+            baths: parseInt(formData.baths) || 0,
+            type: formData.type || 'Apartment',
+            status: formData.status || 'Active',
+            additionalDetails: formData.additionalDetails || '',
+            // Map single image back to images array
+            images: formData.image ? [formData.image] : (formData.images || [])
+        };
+
+        const res = await updateProperty(params.id, dataToSave);
+        if (res.success) {
+            router.push('/agent/dashboard/properties');
+        } else {
+            const detail = res.error || "Please try again.";
+            const message = res.message ? `\nDetails: ${res.message}` : "";
+            alert(`Failed to save changes: ${detail}${message}`);
+        }
     };
 
-    if (!formData) return <div>Loading...</div>;
+    if (loading || !formData) return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
 
     return (
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
@@ -50,7 +81,7 @@ export default function EditPropertyPage({ params }) {
                     <Input
                         label="Property Title"
                         name="title"
-                        value={formData.title}
+                        value={formData.title || ''}
                         onChange={handleChange}
                         required
                     />
@@ -59,14 +90,14 @@ export default function EditPropertyPage({ params }) {
                         <Input
                             label="Price"
                             name="price"
-                            value={formData.price}
+                            value={formData.price || ''}
                             onChange={handleChange}
                             required
                         />
                         <Input
                             label="Address"
                             name="address"
-                            value={formData.address}
+                            value={formData.address || ''}
                             onChange={handleChange}
                             required
                         />
@@ -77,7 +108,7 @@ export default function EditPropertyPage({ params }) {
                             label="Bedrooms"
                             name="beds"
                             type="number"
-                            value={formData.beds}
+                            value={formData.beds || ''}
                             onChange={handleChange}
                             required
                         />
@@ -85,14 +116,14 @@ export default function EditPropertyPage({ params }) {
                             label="Bathrooms"
                             name="baths"
                             type="number"
-                            value={formData.baths}
+                            value={formData.baths || ''}
                             onChange={handleChange}
                             required
                         />
                         <Input
                             label="Square Feet"
-                            name="sqft"
-                            value={formData.sqft}
+                            name="area"
+                            value={formData.area || ''}
                             onChange={handleChange}
                             required
                         />
@@ -105,6 +136,25 @@ export default function EditPropertyPage({ params }) {
                             value={formData.description || ''}
                             onChange={handleChange}
                             rows={4}
+                            style={{
+                                width: '100%',
+                                padding: '0.75rem',
+                                borderRadius: 'var(--radius)',
+                                border: '1px solid var(--border)',
+                                background: 'var(--input)',
+                                fontFamily: 'inherit'
+                            }}
+                        ></textarea>
+                    </div>
+
+                    <div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '0.875rem' }}>Additional Details & Description</label>
+                        <textarea
+                            name="additionalDetails"
+                            value={formData.additionalDetails || ''}
+                            onChange={handleChange}
+                            rows={6}
+                            placeholder="Provide more in-depth details about the property, amenities, neighborhood, etc."
                             style={{
                                 width: '100%',
                                 padding: '0.75rem',

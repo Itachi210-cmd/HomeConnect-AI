@@ -10,6 +10,10 @@ export default function UserManagement() {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
 
+    const handleImageError = (e) => {
+        e.target.src = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80";
+    };
+
     const fetchUsers = async () => {
         try {
             const res = await fetch('/api/users');
@@ -95,7 +99,15 @@ export default function UserManagement() {
                                 <td style={{ padding: '1.25rem' }}>
                                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                                         <div style={{ width: '40px', height: '40px', background: '#EEF2FF', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            {user.image ? <img src={user.image} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} /> : <UserIcon size={20} color="var(--primary)" />}
+                                            {user.image ? (
+                                                <img
+                                                    src={user.image}
+                                                    onError={handleImageError}
+                                                    style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                                                />
+                                            ) : (
+                                                <UserIcon size={20} color="var(--primary)" />
+                                            )}
                                         </div>
                                         <div>
                                             <div style={{ fontWeight: '700', fontSize: '1rem' }}>{user.name}</div>

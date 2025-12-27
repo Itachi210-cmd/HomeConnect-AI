@@ -1,6 +1,6 @@
 "use client";
 import { useLeads } from '@/context/LeadContext';
-import { Phone, Mail, User } from 'lucide-react';
+import { Phone, Mail, User, Edit } from 'lucide-react';
 import FadeIn from '@/components/FadeIn';
 
 export default function LeadsPage() {
@@ -38,13 +38,17 @@ export default function LeadsPage() {
                                         </div>
                                         <div>
                                             <h4 style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{lead.name}</h4>
-                                            <p style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>{lead.date}</p>
+                                            <p style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>
+                                                {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : lead.date || 'No Date'}
+                                            </p>
                                         </div>
                                     </div>
 
                                     <div style={{ marginBottom: '0.75rem' }}>
                                         <p style={{ fontSize: '0.8rem', fontWeight: '500', marginBottom: '0.25rem' }}>Interested in:</p>
-                                        <p style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '600' }}>{lead.interest}</p>
+                                        <p style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: '600' }}>
+                                            {lead.message || lead.interest || "General Inquiry"}
+                                        </p>
                                     </div>
 
                                     <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
@@ -54,6 +58,13 @@ export default function LeadsPage() {
                                         <a href={`mailto:${lead.email}`} style={{ padding: '0.25rem', borderRadius: '4px', background: '#EFF6FF', color: '#1D4ED8' }} title="Email">
                                             <Mail size={14} />
                                         </a>
+                                        <button
+                                            onClick={() => window.location.href = `/agent/dashboard/edit-lead/${lead.id}`}
+                                            style={{ marginLeft: 'auto', padding: '0.25rem', borderRadius: '4px', background: '#F8FAFC', color: '#64748B' }}
+                                            title="Edit Lead"
+                                        >
+                                            <Edit size={14} />
+                                        </button>
                                     </div>
 
                                     {/* Actions */}

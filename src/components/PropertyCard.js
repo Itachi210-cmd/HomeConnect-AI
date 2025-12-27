@@ -3,7 +3,7 @@ import { MapPin, Bed, Bath, Square, Heart } from 'lucide-react';
 import { useProperties } from '@/context/PropertyContext';
 
 export default function PropertyCard({ property }) {
-    const { wishlist, toggleWishlist, compareList, toggleCompare } = useProperties();
+    const { wishlist, toggleWishlist, compareList, toggleCompare, formatPrice } = useProperties();
 
     // Fallback data if property is missing fields
     const {
@@ -24,15 +24,12 @@ export default function PropertyCard({ property }) {
         e.target.src = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80";
     };
 
-    // Format price if number
-    const price = typeof rawPrice === 'number'
-        ? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(rawPrice)
-        : rawPrice;
+    const price = formatPrice(rawPrice);
 
     const isWishlisted = wishlist.includes(id);
 
     return (
-        <div className="card hover-scale" style={{ padding: 0, overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column', border: 'none', boxShadow: '0 10px 30px -10px rgba(0,0,0,0.1)', position: 'relative', background: 'white' }}>
+        <div className="card hover-scale" style={{ padding: 0, overflow: 'hidden', height: '100%', display: 'flex', flexDirection: 'column', border: '1px solid var(--border)', boxShadow: 'var(--shadow-lg)', position: 'relative', background: 'var(--background)', transition: 'transform 0.3s ease, box-shadow 0.3s ease' }}>
             <button
                 onClick={(e) => {
                     e.preventDefault();
@@ -44,15 +41,17 @@ export default function PropertyCard({ property }) {
                     top: '1rem',
                     right: '1rem',
                     zIndex: 10,
-                    background: 'white',
+                    background: 'var(--glass-bg)',
+                    backdropFilter: 'blur(8px)',
                     borderRadius: '50%',
                     padding: '0.5rem',
+                    border: '1px solid var(--glass-border)',
                     boxShadow: 'var(--shadow)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     cursor: 'pointer',
-                    color: isWishlisted ? '#EF4444' : 'var(--muted)'
+                    color: isWishlisted ? '#EF4444' : 'var(--foreground)'
                 }}
             >
                 <Heart size={20} fill={isWishlisted ? '#EF4444' : 'none'} />
@@ -69,8 +68,9 @@ export default function PropertyCard({ property }) {
                     top: '1rem',
                     left: '1rem',
                     zIndex: 10,
-                    background: compareList.find(p => p.id === id) ? 'var(--primary)' : 'white',
-                    color: compareList.find(p => p.id === id) ? 'white' : 'var(--muted)',
+                    background: compareList.find(p => p.id === id) ? 'var(--primary)' : 'var(--glass-bg)',
+                    backdropFilter: 'blur(8px)',
+                    color: compareList.find(p => p.id === id) ? 'white' : 'var(--foreground)',
                     borderRadius: '20px',
                     padding: '4px 12px',
                     fontSize: '0.75rem',
@@ -80,7 +80,7 @@ export default function PropertyCard({ property }) {
                     alignItems: 'center',
                     gap: '4px',
                     cursor: 'pointer',
-                    border: 'none'
+                    border: '1px solid var(--glass-border)'
                 }}
             >
                 {compareList.find(p => p.id === id) ? '✓ Compared' : '+ Compare'}
@@ -111,27 +111,26 @@ export default function PropertyCard({ property }) {
                     }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                             <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{price}</div>
-                            {property.matchScore && (
-                                <div style={{
-                                    background: property.matchScore > 80 ? '#10B981' : property.matchScore > 50 ? '#F59E0B' : '#EF4444',
-                                    color: 'white',
-                                    padding: '0.25rem 0.5rem',
-                                    borderRadius: '0.5rem',
-                                    fontWeight: 'bold',
-                                    fontSize: '0.875rem',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.25rem'
-                                }}>
-                                    <span style={{ fontSize: '1rem' }}>✨</span> {property.matchScore}% Match
-                                </div>
-                            )}
+                            <div style={{
+                                background: property.matchScore > 80 ? 'rgba(16, 185, 129, 0.9)' : property.matchScore > 50 ? 'rgba(245, 158, 11, 0.9)' : 'rgba(239, 68, 68, 0.9)',
+                                color: 'white',
+                                padding: '0.25rem 0.5rem',
+                                borderRadius: '0.5rem',
+                                fontWeight: 'bold',
+                                fontSize: '0.875rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.25rem',
+                                backdropFilter: 'blur(4px)'
+                            }}>
+                                <span style={{ fontSize: '1rem' }}>✨</span> {property.matchScore}% Match
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 {property.matchReason && (
-                    <div style={{ padding: '0.5rem 1rem', background: '#F0F9FF', borderBottom: '1px solid #BAE6FD', color: '#0369A1', fontSize: '0.8rem' }}>
+                    <div style={{ padding: '0.5rem 1rem', background: 'var(--input)', borderBottom: '1px solid var(--border)', color: 'var(--primary)', fontSize: '0.8rem', fontWeight: '600' }}>
                         💡 {property.matchReason}
                     </div>
                 )}

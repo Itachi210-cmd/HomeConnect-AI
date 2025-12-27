@@ -149,22 +149,22 @@ export default function BuyerDashboard() {
                                 </div>
                             </div>
                         </Link>
-                        <div className="card glass hover-scale" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem', border: 'none' }}>
+                        <div className="card glass hover-scale" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
                             <div style={{ background: 'var(--input)', padding: '0.6rem', borderRadius: '12px' }}>
                                 <Search size={24} className="text-primary" />
                             </div>
                             <div>
                                 <div style={{ fontSize: '0.875rem', color: 'var(--muted)', fontWeight: '500' }}>Recent Searches</div>
-                                <div style={{ fontSize: '1.75rem', fontWeight: '800' }}>12</div>
+                                <div style={{ fontSize: '1.75rem', fontWeight: '800', color: 'var(--foreground)' }}>12</div>
                             </div>
                         </div>
-                        <div className="card glass hover-scale" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem', border: 'none', cursor: 'pointer' }} onClick={() => openCalculator()}>
+                        <div className="card glass hover-scale" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }} onClick={() => openCalculator()}>
                             <div style={{ background: 'var(--input)', padding: '0.6rem', borderRadius: '12px' }}>
-                                <Calculator size={24} className="text-primary" />
+                                <Calculator size={24} className="text-secondary" />
                             </div>
                             <div>
                                 <div style={{ fontSize: '0.875rem', color: 'var(--muted)', fontWeight: '500' }}>Mortgage Est.</div>
-                                <div style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--primary)' }}>Calculate Now</div>
+                                <div style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--secondary)' }}>Calculate Now</div>
                             </div>
                         </div>
                     </>
@@ -189,7 +189,7 @@ export default function BuyerDashboard() {
             </div>
 
             {/* Search Header */}
-            <div className="card" style={{ padding: '1rem', marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div className="card glass" style={{ padding: '1rem', marginBottom: '1rem', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', border: '1px solid var(--border)' }}>
                 <div style={{ flex: 1, position: 'relative', minWidth: '250px' }}>
                     <Search size={20} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }} />
                     <input
@@ -200,10 +200,12 @@ export default function BuyerDashboard() {
                         style={{
                             width: '100%',
                             padding: '0.75rem 1rem 0.75rem 3rem',
-                            borderRadius: 'var(--radius)',
+                            borderRadius: '1rem',
                             border: '1px solid var(--border)',
                             outline: 'none',
-                            fontSize: '1rem'
+                            fontSize: '1rem',
+                            background: 'var(--input)',
+                            color: 'var(--foreground)'
                         }}
                     />
                 </div>
@@ -256,7 +258,7 @@ export default function BuyerDashboard() {
                 {/* Property List */}
                 {(viewMode === 'list' || viewMode === 'split') && (
                     <div style={{ overflowY: 'auto', paddingRight: '0.5rem' }}>
-                        <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontSize: '1.5rem', fontWeight: '900', marginBottom: '1.5rem', color: 'var(--foreground)' }}>
                             {filteredProperties.length > 0 ? `Found ${filteredProperties.length} Properties` : 'No Properties Found'}
                         </h2>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -269,7 +271,7 @@ export default function BuyerDashboard() {
 
                 {/* Map View */}
                 {(viewMode === 'map' || viewMode === 'split') && (
-                    <div className="card" style={{ padding: 0, overflow: 'hidden', height: '100%', minHeight: '400px', position: 'relative', zIndex: 1 }}>
+                    <div className="card" style={{ padding: 0, overflow: 'hidden', height: '100%', minHeight: '400px', position: 'relative', zIndex: 1, border: '1px solid var(--border)' }}>
                         <Map properties={filteredProperties} />
                     </div>
                 )}

@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { PropertyProvider } from '@/context/PropertyContext';
 import { LeadProvider } from '@/context/LeadContext';
-
+import { ThemeProvider } from "@/context/ThemeContext";
 import AIChatbot from "@/components/AIChatbot";
 import { Providers } from "@/components/Providers";
 
@@ -19,18 +19,20 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
-        <PropertyProvider>
-          <LeadProvider>
-            <Providers>
-              <Navbar />
-              <main style={{ flex: 1 }}>
-                {children}
-                <AIChatbot />
-              </main>
-              <Footer />
-            </Providers>
-          </LeadProvider>
-        </PropertyProvider>
+        <ThemeProvider>
+          <PropertyProvider>
+            <LeadProvider>
+              <Providers>
+                <Navbar />
+                <main style={{ flex: 1 }}>
+                  {children}
+                  <AIChatbot />
+                </main>
+                <Footer />
+              </Providers>
+            </LeadProvider>
+          </PropertyProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

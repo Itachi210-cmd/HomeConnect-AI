@@ -2,9 +2,10 @@
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Home, User as UserIcon, LogOut, Bell, Settings, ChevronDown } from 'lucide-react';
+import { Menu, X, Home, User as UserIcon, LogOut, Bell, Settings, ChevronDown, Sun, Moon } from 'lucide-react';
 import { useSession, signOut } from "next-auth/react"
 import { useProperties } from '@/context/PropertyContext';
+import { useTheme } from '@/context/ThemeContext';
 import NotificationBell from './NotificationBell';
 
 export default function Navbar() {
@@ -15,6 +16,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const profileRef = useRef(null);
   const { compareList } = useProperties() || { compareList: [] };
+  const { theme, toggleTheme } = useTheme();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -38,8 +40,8 @@ export default function Navbar() {
 
   return (
     <nav style={{
-      borderBottom: '1px solid rgba(226, 232, 240, 0.8)',
-      background: 'rgba(255, 255, 255, 0.9)',
+      borderBottom: '1px solid var(--border)',
+      background: 'var(--glass-bg)',
       backdropFilter: 'blur(12px)',
       position: 'sticky',
       top: 0,
@@ -107,6 +109,25 @@ export default function Navbar() {
                 </Link>
               )}
 
+              {/* Theme Toggle Button */}
+              <button
+                onClick={toggleTheme}
+                style={{
+                  padding: '0.5rem',
+                  borderRadius: '0.5rem',
+                  color: 'var(--foreground)',
+                  background: 'var(--input)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid var(--border)'
+                }}
+                title={theme === 'light' ? 'Switch to Elite Dark' : 'Switch to Classic Light'}
+              >
+                {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+              </button>
+
               <NotificationBell />
 
               {/* User Dropdown */}
@@ -128,7 +149,7 @@ export default function Navbar() {
                     top: '120%',
                     right: 0,
                     width: '200px',
-                    background: 'white',
+                    background: 'var(--background)',
                     borderRadius: '0.5rem',
                     boxShadow: 'var(--shadow-lg)',
                     border: '1px solid var(--border)',
@@ -161,6 +182,22 @@ export default function Navbar() {
               <Link href="/register" className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
                 Get Started
               </Link>
+              {/* Theme Toggle for Guests */}
+              <button
+                onClick={toggleTheme}
+                style={{
+                  padding: '0.5rem',
+                  borderRadius: '0.5rem',
+                  color: 'var(--foreground)',
+                  background: 'var(--input)',
+                  border: '1px solid var(--border)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+              </button>
             </>
           )}
         </div>
@@ -236,6 +273,34 @@ export default function Navbar() {
               </Link>
             </>
           )}
+
+          <div style={{ height: '1px', background: 'var(--border)', margin: '0.5rem 0' }}></div>
+
+          <button
+            onClick={() => { toggleTheme(); setIsOpen(false); }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              color: 'var(--foreground)',
+              fontWeight: '600',
+              padding: '0.5rem 0',
+              width: '100%',
+              textAlign: 'left'
+            }}
+          >
+            {theme === 'light' ? (
+              <>
+                <div style={{ padding: '0.5rem', background: 'var(--input)', borderRadius: '0.5rem', display: 'flex' }}><Moon size={18} /></div>
+                <span>Elite Dark Mode</span>
+              </>
+            ) : (
+              <>
+                <div style={{ padding: '0.5rem', background: 'var(--input)', borderRadius: '0.5rem', display: 'flex' }}><Sun size={18} /></div>
+                <span>Classic Light Mode</span>
+              </>
+            )}
+          </button>
         </div>
       )}
 
@@ -249,7 +314,8 @@ export default function Navbar() {
           }
         }
         .dropdown-item:hover {
-          background-color: #F1F5F9;
+          background-color: var(--input);
+          opacity: 0.8;
         }
       `}</style>
     </nav>

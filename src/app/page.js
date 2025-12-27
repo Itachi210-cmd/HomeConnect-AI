@@ -99,58 +99,62 @@ export default function Home() {
             </span>
           </h1>
 
-          <p style={{ fontSize: '1.25rem', marginBottom: '3rem', color: '#CBD5E1', maxWidth: '600px', margin: '0 auto 3rem' }}>
+          <p style={{ fontSize: '1.25rem', marginBottom: '3rem', color: '#CBD5E1', maxWidth: '600px', margin: '0 auto 3rem', fontWeight: '500', lineHeight: 1.6 }}>
             Experience the future of property search with our intelligent matching system. We find homes that fit your lifestyle, not just your budget.
           </p>
 
           {/* Search Bar */}
           <div style={{
-            background: 'white',
-            padding: '0.75rem',
-            borderRadius: '1rem',
+            background: 'var(--glass-bg)',
+            backdropFilter: 'blur(16px)',
+            border: '1px solid var(--glass-border)',
+            padding: '1rem',
+            borderRadius: '1.5rem',
             display: 'flex',
-            gap: '0.5rem',
+            gap: '0.75rem',
             flexWrap: 'wrap',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-            maxWidth: '800px',
+            boxShadow: 'var(--shadow-xl)',
+            maxWidth: '900px',
             margin: '0 auto'
           }}>
-            <div style={{ flex: 1, minWidth: '180px', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: '#F8FAFC', borderRadius: '0.75rem' }}>
-              <MapPin className="text-primary" size={20} />
-              <input type="text" placeholder="Location" style={{ border: 'none', outline: 'none', width: '100%', fontSize: '1rem', color: '#1E293B', background: 'transparent' }} />
+            <div style={{ flex: 1, minWidth: '180px', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.1)', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <MapPin className="text-secondary" size={20} />
+              <input type="text" placeholder="Location" style={{ border: 'none', outline: 'none', width: '100%', fontSize: '1rem', color: 'white', background: 'transparent' }} />
             </div>
-            <div style={{ flex: 1, minWidth: '140px', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: '#F8FAFC', borderRadius: '0.75rem' }}>
-              <HomeIcon className="text-primary" size={20} />
-              <select style={{ border: 'none', outline: 'none', width: '100%', fontSize: '1rem', color: '#1E293B', background: 'transparent', cursor: 'pointer' }}>
-                <option>Type</option>
-                <option>House</option>
-                <option>Apartment</option>
-                <option>Condo</option>
+            <div style={{ flex: 1, minWidth: '140px', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.1)', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <HomeIcon className="text-secondary" size={20} />
+              <select style={{ border: 'none', outline: 'none', width: '100%', fontSize: '1rem', color: 'white', background: 'transparent', cursor: 'pointer' }}>
+                <option style={{ color: 'black' }}>Type</option>
+                <option style={{ color: 'black' }}>House</option>
+                <option style={{ color: 'black' }}>Apartment</option>
+                <option style={{ color: 'black' }}>Condo</option>
               </select>
             </div>
-            <div style={{ flex: 1, minWidth: '140px', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: '#F8FAFC', borderRadius: '0.75rem' }}>
-              <DollarSign className="text-primary" size={20} />
-              <select style={{ border: 'none', outline: 'none', width: '100%', fontSize: '1rem', color: '#1E293B', background: 'transparent', cursor: 'pointer' }}>
-                <option>Price</option>
-                <option>₹50L - ₹1 Cr</option>
-                <option>₹1 Cr - ₹3 Cr</option>
-                <option>₹3 Cr+</option>
+            <div style={{ flex: 1, minWidth: '140px', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.1)', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <DollarSign className="text-secondary" size={20} />
+              <select style={{ border: 'none', outline: 'none', width: '100%', fontSize: '1rem', color: 'white', background: 'transparent', cursor: 'pointer' }}>
+                <option style={{ color: 'black' }}>Price</option>
+                <option style={{ color: 'black' }}>₹50L - ₹1 Cr</option>
+                <option style={{ color: 'black' }}>₹1 Cr - ₹3 Cr</option>
+                <option style={{ color: 'black' }}>₹3 Cr+</option>
               </select>
             </div>
-            <Button size="lg" style={{ minWidth: '120px', borderRadius: '0.75rem' }} onClick={() => window.location.href = '/properties'}>Search</Button>
+            <Button size="lg" className="btn-primary" style={{ minWidth: '120px', borderRadius: '1rem' }} onClick={() => window.location.href = '/properties'}>Search</Button>
           </div>
         </div>
       </section>
 
-      {/* Featured Properties Section (Simplified) */}
-      <section style={{ padding: '5rem 0', background: '#F8FAFC' }}>
+      {/* Featured Properties Section */}
+      <section style={{ padding: '6rem 0', background: 'var(--background)' }}>
         <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', marginBottom: '3rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', marginBottom: '4rem' }}>
             <div>
-              <h2 style={{ fontSize: '2.25rem', fontWeight: 'bold', marginBottom: '0.5rem', color: 'var(--foreground)' }}>Featured Properties</h2>
-              <p style={{ color: 'var(--muted)' }}>Handpicked selection of premium properties.</p>
+              <h2 style={{ fontSize: '2.5rem', fontWeight: '900', marginBottom: '0.5rem', color: 'var(--foreground)', letterSpacing: '-0.02em' }}>Featured Properties</h2>
+              <p style={{ color: 'var(--muted)', fontSize: '1.1rem' }}>Handpicked selection of premium properties.</p>
             </div>
-            <Button variant="outline" onClick={() => window.location.href = '/properties'}>View All <ArrowRight size={16} style={{ marginLeft: '0.5rem' }} /></Button>
+            <Button variant="outline" onClick={() => window.location.href = '/properties'} style={{ borderRadius: '0.75rem', fontWeight: '700' }}>
+              View All <ArrowRight size={18} style={{ marginLeft: '0.5rem' }} />
+            </Button>
           </div>
 
           <div className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ display: 'grid', gap: '2rem' }}>
@@ -197,37 +201,41 @@ export default function Home() {
       </section>
 
       {/* Newsletter Section */}
-      <section style={{ padding: '6rem 0', background: 'white' }}>
+      <section style={{ padding: '8rem 0', background: 'var(--background)' }}>
         <div className="container">
           <div style={{
-            background: 'linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%)',
-            borderRadius: '2rem',
-            padding: '4rem 2rem',
+            background: 'var(--gradient-primary)',
+            borderRadius: '3rem',
+            padding: '5rem 2rem',
             textAlign: 'center',
             color: 'white',
             position: 'relative',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            boxShadow: 'var(--shadow-xl)'
           }}>
             <div style={{ position: 'relative', zIndex: 10 }}>
-              <h2 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Subscribe to our Newsletter</h2>
-              <p style={{ fontSize: '1.125rem', opacity: 0.9, marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem' }}>
-                Get the latest market updates, hot deals, and exclusive offers sent directly to your inbox.
+              <h2 style={{ fontSize: '3rem', fontWeight: '900', marginBottom: '1rem', letterSpacing: '-0.02em' }}>Subscribe to our Newsletter</h2>
+              <p style={{ fontSize: '1.25rem', opacity: 0.9, marginBottom: '3rem', maxWidth: '650px', margin: '0 auto 3rem' }}>
+                Join 10,000+ owners and buyers receiving exclusive market insights and hot property alerts.
               </p>
-              <div style={{ display: 'flex', gap: '1rem', maxWidth: '500px', margin: '0 auto', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: '1rem', maxWidth: '600px', margin: '0 auto', flexWrap: 'wrap', padding: '0.5rem', background: 'rgba(255,255,255,0.1)', borderRadius: '999px', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.2)' }}>
                 <input
                   type="email"
                   placeholder="Enter your email address"
                   style={{
                     flex: 1,
-                    padding: '1rem 1.5rem',
+                    padding: '1rem 2rem',
                     borderRadius: '999px',
                     border: 'none',
                     outline: 'none',
-                    minWidth: '250px'
+                    minWidth: '250px',
+                    background: 'transparent',
+                    color: 'white',
+                    fontSize: '1.1rem'
                   }}
                 />
-                <Button style={{ background: 'white', color: 'var(--primary)', borderRadius: '999px', padding: '1rem 2rem', fontWeight: 'bold' }}>
-                  Subscribe
+                <Button style={{ background: 'white', color: 'var(--primary)', borderRadius: '999px', padding: '1rem 2.5rem', fontWeight: '900', boxShadow: 'var(--shadow-lg)' }}>
+                  Subscribe Now
                 </Button>
               </div>
             </div>
@@ -240,33 +248,45 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section style={{ padding: '8rem 0', background: 'var(--foreground)', color: 'white' }}>
+      <section style={{ padding: '10rem 0', background: 'var(--input)', color: 'var(--foreground)' }}>
         <div className="container" style={{ textAlign: 'center' }}>
-          <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '4rem' }}>What Our Users Say</h2>
-          <div className="grid-cols-1 md:grid-cols-3" style={{ display: 'grid', gap: '2rem' }}>
+          <h2 style={{ fontSize: '3rem', fontWeight: '900', marginBottom: '5rem', letterSpacing: '-0.02em' }}>What Our Users Say</h2>
+          <div className="grid-cols-1 md:grid-cols-3" style={{ display: 'grid', gap: '2.5rem' }}>
             {[
               { name: "Priya Sharma", role: "Software Engineer", text: "HomeConnect made finding my apartment in Bangalore so easy. The AI recommendations were spot on!" },
               { name: "Rahul Verma", role: "Business Owner", text: "I sold my property in Mumbai within a week. The agent tools are incredibly powerful and easy to use." },
               { name: "Anjali Gupta", role: "First-time Buyer", text: "The mortgage calculator and neighborhood insights gave me the confidence to buy my first home." }
             ].map((testimonial, i) => (
-              <div key={i} className="card" style={{ textAlign: 'left', background: '#1E293B', border: '1px solid #334155', color: 'white' }}>
-                <div style={{ display: 'flex', gap: '0.25rem', color: '#F59E0B', marginBottom: '1.5rem' }}>
-                  <Star fill="#F59E0B" size={18} />
-                  <Star fill="#F59E0B" size={18} />
-                  <Star fill="#F59E0B" size={18} />
-                  <Star fill="#F59E0B" size={18} />
-                  <Star fill="#F59E0B" size={18} />
+              <div key={i} className="card glass hover-scale" style={{ textAlign: 'left', padding: '2.5rem', borderRadius: '2rem' }}>
+                <div style={{ display: 'flex', gap: '0.25rem', color: 'var(--accent)', marginBottom: '1.5rem' }}>
+                  <Star fill="currentColor" size={20} />
+                  <Star fill="currentColor" size={20} />
+                  <Star fill="currentColor" size={20} />
+                  <Star fill="currentColor" size={20} />
+                  <Star fill="currentColor" size={20} />
                 </div>
-                <p style={{ color: '#CBD5E1', marginBottom: '2rem', lineHeight: 1.7, fontSize: '1.125rem', fontStyle: 'italic' }}>
+                <p style={{ color: 'var(--muted)', marginBottom: '2.5rem', lineHeight: 1.8, fontSize: '1.15rem', fontStyle: 'italic', fontWeight: '500' }}>
                   "{testimonial.text}"
                 </p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <div style={{ width: '48px', height: '48px', background: '#475569', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                  <div style={{
+                    width: '56px',
+                    height: '56px',
+                    background: 'var(--gradient-primary)',
+                    color: 'white',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: '900',
+                    fontSize: '1.25rem',
+                    boxShadow: 'var(--shadow)'
+                  }}>
                     {testimonial.name[0]}
                   </div>
                   <div>
-                    <div style={{ fontWeight: 'bold', fontSize: '1rem' }}>{testimonial.name}</div>
-                    <div style={{ fontSize: '0.875rem', color: '#94A3B8' }}>{testimonial.role}</div>
+                    <div style={{ fontWeight: '800', fontSize: '1.1rem', color: 'var(--foreground)' }}>{testimonial.name}</div>
+                    <div style={{ fontSize: '0.9rem', color: 'var(--primary)', fontWeight: '700' }}>{testimonial.role}</div>
                   </div>
                 </div>
               </div>

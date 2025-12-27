@@ -1,12 +1,15 @@
 "use client";
 import { useState } from 'react';
 import { useProperties } from '@/context/PropertyContext';
+import { useLeads } from '@/context/LeadContext';
 import Button from '@/components/Button';
-import { Upload, FileSpreadsheet, CheckCircle, AlertCircle } from 'lucide-react';
+import { Upload, FileSpreadsheet, CheckCircle, AlertCircle, Users, Home } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
-export default function ImportPropertiesPage() {
-    const { addProperties } = useProperties();
+export default function ImportPage() {
+    const { addProperties, parsePrice } = useProperties();
+    const { addLeads } = useLeads();
+    const [importType, setImportType] = useState('properties'); // 'properties' or 'leads'
     const [file, setFile] = useState(null);
     const [previewData, setPreviewData] = useState([]);
     const [error, setError] = useState('');
@@ -37,6 +40,19 @@ export default function ImportPropertiesPage() {
                     setPreviewData([]);
                 } else {
                     setPreviewData(jsonData);
+
+                    // Auto-detect mode
+                    const firstRow = jsonData[0];
+                    const hasLeadFields = firstRow.Email || firstRow.Name || firstRow.Phone;
+                    const hasPropFields = firstRow.Title || firstRow.Price || firstRow.Location;
+
+                    if (hasLeadFields && !hasPropFields && importType === 'properties') {
+                        setImportType('leads');
+                        setSuccess("Switched to 'Leads' mode automatically based on file content.");
+                    } else if (hasPropFields && !hasLeadFields && importType === 'leads') {
+                        setImportType('properties');
+                        setSuccess("Switched to 'Properties' mode automatically based on file content.");
+                    }
                 }
             } catch (err) {
                 setError("Failed to parse file. Please ensure it's a valid Excel file.");
@@ -46,34 +62,103 @@ export default function ImportPropertiesPage() {
         reader.readAsArrayBuffer(file);
     };
 
-    const handleImport = () => {
+    const handleImport = async () => {
         if (previewData.length > 0) {
-            // Map Excel columns to our property structure if needed
-            // For now, assuming columns match: title, price, location, address, beds, baths, area
-            const formattedData = previewData.map(row => ({
-                title: row.Title || row.title || "Untitled Property",
-                price: row.Price || row.price || "Price on Request",
-                location: row.Location || row.location || "Unknown Location",
-                address: row.Address || row.address || "",
-                beds: row.Beds || row.beds || 0,
-                baths: row.Baths || row.baths || 0,
-                area: row.Area || row.area || "N/A",
-                lat: row.Lat || row.lat || 19.0760,
-                lng: row.Lng || row.lng || 72.8777
-            }));
+            setError('');
+            setSuccess('');
 
-            addProperties(formattedData);
-            setSuccess(`Successfully imported ${formattedData.length} properties!`);
-            setFile(null);
-            setPreviewData([]);
+            if (importType === 'properties') {
+                const formattedData = previewData.map(row => ({
+                    title: row.Title || row.title || row.Property || row.Name || row["Property Name"] || row.Project || row.Listing || row["Apartment Name"] || "Untitled Property",
+                    description: row.Description || row.description || row.Details || row.About || "Beautiful property imported via Excel.",
+                    price: parsePrice(row.Price || row.price || row.Cost || row.Value || row.Rate || row["Listing Price"] || row["Total Price"] || row.Asking),
+                    location: row.Location || row.location || row.City || row.Area || row.Region || row.Neighborhood || row.Sector || "Unknown Location",
+                    address: row.Address || row.address || row.Street || "",
+                    type: row.Type || row.type || row.Category || "Apartment",
+                    status: row.Status || row.status || "Active",
+                    beds: parseInt(row.Beds || row.beds || row.Bedrooms || row.BHK) || 0,
+                    baths: parseInt(row.Baths || row.baths || row.Bathrooms || row.Toilets) || 0,
+                    area: parseFloat(row.Area || row.area || row.Sqft || row.sqft || row.Size || row["Total Area"]) || 0,
+                    images: row.Image || row.image || row.Photo || row.Picture ? [row.Image || row.image || row.Photo || row.Picture] : [],
+                    lat: row.Lat || row.lat || 19.0760,
+                    lng: row.Lng || row.lng || 72.8777
+                }));
+
+                const count = await addProperties(formattedData);
+                if (count > 0) {
+                    setSuccess(`Successfully imported ${count} properties!`);
+                } else {
+                    setError("Import failed. Please ensure the file contains valid property data.");
+                }
+            } else {
+                // Mapping for Leads
+                const formattedData = previewData.map(row => ({
+                    name: row.Name || row.name || row.FullName || row.Client || "Unknown Client",
+                    email: row.Email || row.email || "",
+                    phone: row.Phone || row.phone || row.Mobile || "",
+                    message: row.Message || row.message || row.Notes || row.Interest || "Imported via Excel",
+                    status: "New" // Match dashboard "New" category
+                }));
+
+                const count = await addLeads(formattedData);
+                if (count > 0) {
+                    setSuccess(`Successfully imported ${count} leads!`);
+                } else {
+                    setError("Import failed. Please ensure the file contains valid lead data.");
+                }
+            }
+
+            if (!error) {
+                setFile(null);
+                setPreviewData([]);
+            }
         }
     };
 
     return (
         <div style={{ maxWidth: '800px' }}>
-            <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <FileSpreadsheet className="text-primary" /> Import Properties
-            </h1>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                <h1 style={{ fontSize: '2rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <FileSpreadsheet className="text-primary" /> Data Import
+                </h1>
+
+                <div style={{ display: 'flex', background: '#F1F5F9', padding: '0.25rem', borderRadius: '0.75rem' }}>
+                    <button
+                        onClick={() => { setImportType('properties'); setPreviewData([]); setFile(null); }}
+                        style={{
+                            padding: '0.5rem 1rem',
+                            borderRadius: '0.5rem',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            background: importType === 'properties' ? 'white' : 'transparent',
+                            boxShadow: importType === 'properties' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                            transition: 'all 0.2s'
+                        }}
+                    >
+                        <Home size={16} /> Properties
+                    </button>
+                    <button
+                        onClick={() => { setImportType('leads'); setPreviewData([]); setFile(null); }}
+                        style={{
+                            padding: '0.5rem 1rem',
+                            borderRadius: '0.5rem',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            background: importType === 'leads' ? 'white' : 'transparent',
+                            boxShadow: importType === 'leads' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                            transition: 'all 0.2s'
+                        }}
+                    >
+                        <Users size={16} /> Leads
+                    </button>
+                </div>
+            </div>
 
             <div className="card" style={{ marginBottom: '2rem' }}>
                 <div style={{
@@ -119,7 +204,7 @@ export default function ImportPropertiesPage() {
             {previewData.length > 0 && (
                 <div className="card">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                        <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>Preview ({previewData.length} Properties)</h3>
+                        <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>Preview ({previewData.length} {importType === 'properties' ? 'Properties' : 'Leads'})</h3>
                         <Button onClick={handleImport}>Confirm Import</Button>
                     </div>
 
@@ -127,21 +212,43 @@ export default function ImportPropertiesPage() {
                         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
                             <thead>
                                 <tr style={{ background: '#F1F5F9', textAlign: 'left' }}>
-                                    <th style={{ padding: '0.75rem', borderBottom: '1px solid var(--border)' }}>Title</th>
-                                    <th style={{ padding: '0.75rem', borderBottom: '1px solid var(--border)' }}>Price</th>
-                                    <th style={{ padding: '0.75rem', borderBottom: '1px solid var(--border)' }}>Location</th>
-                                    <th style={{ padding: '0.75rem', borderBottom: '1px solid var(--border)' }}>Beds</th>
-                                    <th style={{ padding: '0.75rem', borderBottom: '1px solid var(--border)' }}>Baths</th>
+                                    {importType === 'properties' ? (
+                                        <>
+                                            <th style={{ padding: '0.75rem', borderBottom: '1px solid var(--border)' }}>Title</th>
+                                            <th style={{ padding: '0.75rem', borderBottom: '1px solid var(--border)' }}>Price</th>
+                                            <th style={{ padding: '0.75rem', borderBottom: '1px solid var(--border)' }}>Location</th>
+                                            <th style={{ padding: '0.75rem', borderBottom: '1px solid var(--border)' }}>Beds</th>
+                                            <th style={{ padding: '0.75rem', borderBottom: '1px solid var(--border)' }}>Baths</th>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <th style={{ padding: '0.75rem', borderBottom: '1px solid var(--border)' }}>Name</th>
+                                            <th style={{ padding: '0.75rem', borderBottom: '1px solid var(--border)' }}>Email</th>
+                                            <th style={{ padding: '0.75rem', borderBottom: '1px solid var(--border)' }}>Phone</th>
+                                            <th style={{ padding: '0.75rem', borderBottom: '1px solid var(--border)' }}>Message</th>
+                                        </>
+                                    )}
                                 </tr>
                             </thead>
                             <tbody>
                                 {previewData.slice(0, 5).map((row, index) => (
                                     <tr key={index} style={{ borderBottom: '1px solid var(--border)' }}>
-                                        <td style={{ padding: '0.75rem' }}>{row.Title || row.title}</td>
-                                        <td style={{ padding: '0.75rem' }}>{row.Price || row.price}</td>
-                                        <td style={{ padding: '0.75rem' }}>{row.Location || row.location}</td>
-                                        <td style={{ padding: '0.75rem' }}>{row.Beds || row.beds}</td>
-                                        <td style={{ padding: '0.75rem' }}>{row.Baths || row.baths}</td>
+                                        {importType === 'properties' ? (
+                                            <>
+                                                <td style={{ padding: '0.75rem' }}>{row.Title || row.title}</td>
+                                                <td style={{ padding: '0.75rem' }}>{row.Price || row.price}</td>
+                                                <td style={{ padding: '0.75rem' }}>{row.Location || row.location}</td>
+                                                <td style={{ padding: '0.75rem' }}>{row.Beds || row.beds}</td>
+                                                <td style={{ padding: '0.75rem' }}>{row.Baths || row.baths}</td>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <td style={{ padding: '0.75rem' }}>{row.Name || row.name || row.FullName}</td>
+                                                <td style={{ padding: '0.75rem' }}>{row.Email || row.email}</td>
+                                                <td style={{ padding: '0.75rem' }}>{row.Phone || row.phone}</td>
+                                                <td style={{ padding: '0.75rem', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.Message || row.message || row.Notes}</td>
+                                            </>
+                                        )}
                                     </tr>
                                 ))}
                             </tbody>

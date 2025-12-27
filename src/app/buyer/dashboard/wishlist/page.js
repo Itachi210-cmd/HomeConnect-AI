@@ -10,8 +10,8 @@ export default function WishlistPage() {
 
     return (
         <div>
-            <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <Heart className="text-primary" fill="var(--primary)" /> My Wishlist
+            <h1 style={{ fontSize: '2.5rem', fontWeight: '950', marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--foreground)', letterSpacing: '-0.02em' }}>
+                <Heart className="text-primary" fill="var(--primary)" size={32} /> My Wishlist
             </h1>
 
             {wishlistedProperties.length > 0 ? (
@@ -21,10 +21,12 @@ export default function WishlistPage() {
                     ))}
                 </div>
             ) : (
-                <div className="card" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
-                    <Heart size={48} style={{ color: 'var(--muted)', marginBottom: '1rem', opacity: 0.5 }} />
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>Your wishlist is empty</h3>
-                    <p style={{ color: 'var(--muted)' }}>Start exploring properties and save your favorites here.</p>
+                <div className="card glass" style={{ textAlign: 'center', padding: '8rem 2rem', borderRadius: '2.5rem', border: '2px dashed var(--border)' }}>
+                    <div style={{ background: 'var(--input)', width: '100px', height: '100px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2.5rem', boxShadow: 'var(--shadow)' }}>
+                        <Heart size={48} style={{ color: 'var(--muted)', opacity: 0.5 }} />
+                    </div>
+                    <h3 style={{ fontSize: '2rem', fontWeight: '900', marginBottom: '1.25rem', color: 'var(--foreground)' }}>Your wishlist is empty</h3>
+                    <p style={{ color: 'var(--muted)', fontSize: '1.1rem' }}>Start exploring properties and save your favorites here.</p>
                 </div>
             )}
         </div>

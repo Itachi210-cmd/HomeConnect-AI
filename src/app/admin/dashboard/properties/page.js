@@ -5,11 +5,17 @@ import FadeIn from '@/components/FadeIn';
 import Loading from '@/components/Loading';
 import Button from '@/components/Button';
 import Link from 'next/link';
+import { useProperties } from '@/context/PropertyContext';
 
 export default function AdminProperties() {
+    const { formatPrice } = useProperties();
     const [properties, setProperties] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+
+    const handleImageError = (e) => {
+        e.target.src = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80";
+    };
 
     const fetchData = async () => {
         try {
@@ -105,13 +111,17 @@ export default function AdminProperties() {
                                 <td className="td" style={{ fontWeight: '700' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                                         <div style={{ width: '40px', height: '40px', borderRadius: '8px', overflow: 'hidden', background: '#F1F5F9' }}>
-                                            <img src={(Array.isArray(prop.images) ? prop.images[0] : prop.images) || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                            <img
+                                                src={(Array.isArray(prop.images) ? prop.images[0] : prop.images) || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"}
+                                                onError={handleImageError}
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                            />
                                         </div>
                                         {prop.title}
                                     </div>
                                 </td>
                                 <td className="td">{prop.location}</td>
-                                <td className="td">₹{(prop.price / 10000000).toFixed(2)} Cr</td>
+                                <td className="td">{formatPrice(prop.price)}</td>
                                 <td className="td">
                                     <span className="status-badge" style={{
                                         background: prop.status === 'For Sale' ? '#DCFCE7' : '#FEE2E2',

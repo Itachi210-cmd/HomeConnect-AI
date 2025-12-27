@@ -61,6 +61,7 @@ model Property {
   area        Float
   images      String?  // Changed Json to String for simplicity in SQLite if needed, but Json usually works. Let's try String to be safe.
   features    String?  // Changed Json to String
+  additionalDetails String? 
   lat         Float?
   lng         Float?
   agentId     String
@@ -71,6 +72,8 @@ model Property {
   savedBy     User[]   @relation("UserWishlist")
   payments    Payment[] @relation("PropertyCommission")
   views       Int      @default(0)
+  marketValue Float?
+  valuationNotes String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

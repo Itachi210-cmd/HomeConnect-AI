@@ -91,7 +91,7 @@ async function main() {
             lng: 77.2200,
             images: JSON.stringify([
                 "https://images.unsplash.com/photo-1577083165350-16c9f88b4a25?auto=format&fit=crop&w=1200",
-                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200",
+                "https://images.unsplash.com/photo-1600566753190-17f0bab2a674?auto=format&fit=crop&w=1200",
                 "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1200",
                 "https://images.unsplash.com/photo-1600566753004-7027969c54e1?auto=format&fit=crop&w=1200"
             ]),
@@ -142,6 +142,52 @@ async function main() {
                 "https://images.unsplash.com/photo-1600047509358-9dc75507daeb?auto=format&fit=crop&w=1200"
             ]),
             features: JSON.stringify(["Private Lift", "Sky Garden", "Valet Parking", "Clubhouse Access"]),
+            agentId: agent.id
+        },
+        {
+            id: 'prop_goa_1',
+            title: "The Azure Sands Estate",
+            description: "Exclusive beachfront villa in North Goa. Direct access to a private beach, Mediterranean architecture, and lush tropical gardens.",
+            price: 180000000,
+            location: "Candolim, Goa",
+            address: "1 Beachfront Lane, Candolim, Goa 403515",
+            type: "Villa",
+            status: "For Sale",
+            beds: 5,
+            baths: 5,
+            area: 7200,
+            lat: 15.5152,
+            lng: 73.7649,
+            images: JSON.stringify([
+                "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200",
+                "https://images.unsplash.com/photo-1600573472591-ee6b68d14eb6?auto=format&fit=crop&w=1200",
+                "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200",
+                "https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=1200"
+            ]),
+            features: JSON.stringify(["Beachfront", "Tropical Garden", "Private Bar", "Sun Deck"]),
+            agentId: agent.id
+        },
+        {
+            id: 'prop_udaipur_1',
+            title: "Royal Rajputana Haveli",
+            description: "A meticulously restored 200-year-old Haveli on the banks of Lake Pichola. Regal interiors with gold leaf work and original artifacts.",
+            price: 550000000,
+            location: "Lake Pichola, Udaipur",
+            address: "Haridasji Ki Magri, Udaipur 313001",
+            type: "Mansion",
+            status: "For Sale",
+            beds: 12,
+            baths: 14,
+            area: 18000,
+            lat: 24.5714,
+            lng: 73.6766,
+            images: JSON.stringify([
+                "https://images.unsplash.com/photo-1600566753151-384129cf4e3e?auto=format&fit=crop&w=1200",
+                "https://images.unsplash.com/photo-1600566752229-250008064d7c?auto=format&fit=crop&w=1200",
+                "https://images.unsplash.com/photo-1600566753018-9c5950808a34?auto=format&fit=crop&w=1200",
+                "https://images.unsplash.com/photo-1600210491816-69d27688ad5a?auto=format&fit=crop&w=1200"
+            ]),
+            features: JSON.stringify(["Lake View", "Heritage Architecture", "Gold Leaf Work", "Private Boat Dock"]),
             agentId: agent.id
         }
     ];

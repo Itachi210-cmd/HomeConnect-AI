@@ -2,15 +2,15 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]/route';
+import { authOptions } from "@/lib/auth";
 
 // PUT: Update Lead Status
 export async function PUT(request, { params }) {
     try {
+        const { id } = await params;
         const session = await getServerSession(authOptions);
         if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-        const id = params.id;
         const data = await request.json();
 
         // Verify lead exists
@@ -21,6 +21,10 @@ export async function PUT(request, { params }) {
         const updatedLead = await prisma.lead.update({
             where: { id },
             data: {
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                message: data.message,
                 status: data.status
             }
         });

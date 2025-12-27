@@ -28,10 +28,12 @@ export default function AgentLayout({ children }) {
                     top: '1rem',
                     right: '1rem',
                     zIndex: 50,
-                    background: 'white',
+                    background: 'var(--input)',
+                    color: 'var(--foreground)',
                     padding: '0.5rem',
                     borderRadius: '0.5rem',
-                    boxShadow: 'var(--shadow)'
+                    boxShadow: 'var(--shadow)',
+                    border: '1px solid var(--border)'
                 }}
             >
                 {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -44,8 +46,8 @@ export default function AgentLayout({ children }) {
                 fixed md:relative 
                 z-40 
                 h-full 
-                bg-white
-            `}>
+                border-r border-[var(--border)]
+            `} style={{ background: 'var(--background)' }}>
                 <Sidebar items={agentNavItems} />
             </div>
 
@@ -57,7 +59,7 @@ export default function AgentLayout({ children }) {
                 ></div>
             )}
 
-            <main style={{ flex: 1, padding: '2rem', background: '#F8FAFC', width: '100%' }}>
+            <main style={{ flex: 1, padding: '2rem', background: 'var(--background)', width: '100%', transition: 'background 0.3s ease' }}>
                 {children}
             </main>
         </div>

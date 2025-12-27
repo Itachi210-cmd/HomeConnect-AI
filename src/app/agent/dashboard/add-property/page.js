@@ -17,8 +17,9 @@ export default function AddPropertyPage() {
         address: '',
         beds: '',
         baths: '',
-        sqft: '',
+        area: '',
         description: '',
+        additionalDetails: '',
         image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' // Default image for now
     });
 
@@ -31,8 +32,8 @@ export default function AddPropertyPage() {
 
         await addProperty({
             ...formData,
-            area: parseFloat(formData.sqft) || 0,
-            price: parsePrice(formData.price),
+            area: parseFloat(formData.area) || 0,
+            price: parsePrice(String(formData.price)),
             images: [formData.image],
             status: 'Active',
             views: 0,
@@ -62,7 +63,7 @@ export default function AddPropertyPage() {
                     type: formData.type || 'Property',
                     beds: formData.beds,
                     baths: formData.baths,
-                    area: formData.sqft,
+                    area: formData.area,
                     features: [] // Pass features if we had a field for it
                 })
             });
@@ -139,8 +140,8 @@ export default function AddPropertyPage() {
                         />
                         <Input
                             label="Square Feet"
-                            name="sqft"
-                            value={formData.sqft}
+                            name="area"
+                            value={formData.area}
                             onChange={handleChange}
                             required
                         />
@@ -191,6 +192,25 @@ export default function AddPropertyPage() {
                                 fontFamily: 'inherit'
                             }}
                             required
+                        ></textarea>
+                    </div>
+
+                    <div>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '0.875rem' }}>Additional Details & Description</label>
+                        <textarea
+                            name="additionalDetails"
+                            value={formData.additionalDetails}
+                            onChange={handleChange}
+                            rows={6}
+                            placeholder="Provide more in-depth details about the property, amenities, neighborhood, etc."
+                            style={{
+                                width: '100%',
+                                padding: '0.75rem',
+                                borderRadius: 'var(--radius)',
+                                border: '1px solid var(--border)',
+                                background: 'var(--input)',
+                                fontFamily: 'inherit'
+                            }}
                         ></textarea>
                     </div>
 

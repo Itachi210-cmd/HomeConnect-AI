@@ -1,8 +1,7 @@
-
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 
 // GET: Fetch all properties
 export async function GET(request) {
@@ -82,6 +81,7 @@ export async function POST(request) {
                 area: parseFloat(data.area) || 0,
                 images: JSON.stringify(data.images || []),
                 features: JSON.stringify(data.features || []),
+                additionalDetails: data.additionalDetails || "",
                 agentId: user.id
             }
         });
