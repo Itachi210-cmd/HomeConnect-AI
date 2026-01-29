@@ -2,16 +2,15 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-    baseURL: 'https://openrouter.ai/api/v1',
-    apiKey: process.env.OPENROUTER_API_KEY,
-    defaultHeaders: {
-        'HTTP-Referer': 'http://localhost:3000',
-        'X-Title': 'HomeConnect',
-    },
-});
-
 export async function POST(request) {
+    const openai = new OpenAI({
+        baseURL: 'https://openrouter.ai/api/v1',
+        apiKey: process.env.OPENROUTER_API_KEY,
+        defaultHeaders: {
+            'HTTP-Referer': 'http://localhost:3000',
+            'X-Title': 'HomeConnect',
+        },
+    });
     try {
         const data = await request.json();
         const { preferences, properties } = data;

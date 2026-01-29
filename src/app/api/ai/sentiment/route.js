@@ -1,10 +1,6 @@
 import { OpenAI } from 'openai';
 import { NextResponse } from 'next/server';
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(request) {
     try {
         const { reviews } = await request.json();
@@ -12,6 +8,15 @@ export async function POST(request) {
         if (!reviews || !Array.isArray(reviews) || reviews.length === 0) {
             return NextResponse.json({ error: "No reviews provided" }, { status: 400 });
         }
+
+        const openai = new OpenAI({
+            baseURL: 'https://openrouter.ai/api/v1',
+            apiKey: process.env.OPENROUTER_API_KEY,
+            defaultHeaders: {
+                'HTTP-Referer': 'http://localhost:3000',
+                'X-Title': 'HomeConnect',
+            },
+        });
 
         const prompt = `Analyze the following agent reviews and provide a summary of sentiment and key insights.
         Reviews:
@@ -25,7 +30,7 @@ export async function POST(request) {
         - summary: (string, a 1-sentence summary of overall reputation)`;
 
         const response = await openai.chat.completions.create({
-            model: "gpt-4o",
+            model: "google/gemini-2.0-flash-exp:free",
             messages: [
                 { role: "system", content: "You are an expert real estate performance analyst. Return only JSON." },
                 { role: "user", content: prompt }

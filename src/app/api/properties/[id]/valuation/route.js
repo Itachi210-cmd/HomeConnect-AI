@@ -5,10 +5,6 @@ import OpenAI from 'openai';
 import { getServerSession } from 'next-auth';
 import { authOptions } from "@/lib/auth";
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function POST(request, { params }) {
     try {
         const { id } = await params;
@@ -17,6 +13,16 @@ export async function POST(request, { params }) {
         if (!session) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
+
+        // Initialize OpenAI (OpenRouter) inside handler
+        const openai = new OpenAI({
+            baseURL: 'https://openrouter.ai/api/v1',
+            apiKey: process.env.OPENROUTER_API_KEY,
+            defaultHeaders: {
+                'HTTP-Referer': 'http://localhost:3000',
+                'X-Title': 'HomeConnect',
+            },
+        });
 
         // 1. Fetch the target property
         const property = await prisma.property.findUnique({
@@ -70,9 +76,9 @@ export async function POST(request, { params }) {
         `;
 
         const completion = await openai.chat.completions.create({
-            model: "gpt-4o",
+            model: "google/gemini-2.0-flash-exp:free",
             messages: [
-                { role: "system", content: "You are a professional real estate analyst." },
+                { role: "system", content: "You are a professional real estate analyst. Return only JSON." },
                 { role: "user", content: prompt }
             ],
             response_format: { type: "json_object" }
