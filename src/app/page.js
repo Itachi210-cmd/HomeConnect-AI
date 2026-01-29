@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { useProperties } from '@/context/PropertyContext';
-import { Search, MapPin, DollarSign, Home as HomeIcon, ArrowRight, Star, Users, TrendingUp, Shield } from 'lucide-react';
+import { Search, MapPin, DollarSign, Home as HomeIcon, ArrowRight, Star, Users, TrendingUp, Shield, Brain, Sparkles, Zap } from 'lucide-react';
 import Button from '@/components/Button';
 import PropertyCard from '@/components/PropertyCard';
 
@@ -17,6 +17,7 @@ export default function Home() {
     citiesCovered: '150+',
     happyClients: '12k+'
   });
+  const [searchMode, setSearchMode] = useState('buy'); // 'buy' or 'rent'
 
   useEffect(() => {
     fetch('/api/stats/public')
@@ -115,31 +116,114 @@ export default function Home() {
             flexWrap: 'wrap',
             boxShadow: 'var(--shadow-xl)',
             maxWidth: '900px',
-            margin: '0 auto'
+            margin: '0 auto',
+            flexDirection: 'column', // Changed to column to stack tabs
+            padding: 0, // Reset padding for inner container
+            background: 'transparent', // Reset background
+            border: 'none', // Reset border
+            boxShadow: 'none', // Reset shadow
+            backdropFilter: 'none', // Reset blur
           }}>
-            <div style={{ flex: 1, minWidth: '180px', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.1)', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)' }}>
-              <MapPin className="text-secondary" size={20} />
-              <input type="text" placeholder="Location" style={{ border: 'none', outline: 'none', width: '100%', fontSize: '1rem', color: 'white', background: 'transparent' }} />
+            {/* Tabs */}
+            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', justifyContent: 'center' }}>
+              <button
+                onClick={() => setSearchMode('buy')}
+                style={{
+                  padding: '0.75rem 2rem',
+                  borderRadius: '2rem',
+                  background: searchMode === 'buy' ? 'white' : 'rgba(255,255,255,0.2)',
+                  color: searchMode === 'buy' ? 'var(--primary)' : 'white',
+                  fontWeight: '700',
+                  backdropFilter: 'blur(10px)',
+                  transition: 'all 0.3s ease',
+                  border: 'none'
+                }}
+              >
+                Buy
+              </button>
+              <button
+                onClick={() => setSearchMode('rent')}
+                style={{
+                  padding: '0.75rem 2rem',
+                  borderRadius: '2rem',
+                  background: searchMode === 'rent' ? 'white' : 'rgba(255,255,255,0.2)',
+                  color: searchMode === 'rent' ? 'var(--primary)' : 'white',
+                  fontWeight: '700',
+                  backdropFilter: 'blur(10px)',
+                  transition: 'all 0.3s ease',
+                  border: 'none'
+                }}
+              >
+                Rent
+              </button>
             </div>
-            <div style={{ flex: 1, minWidth: '140px', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.1)', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)' }}>
-              <HomeIcon className="text-secondary" size={20} />
-              <select style={{ border: 'none', outline: 'none', width: '100%', fontSize: '1rem', color: 'white', background: 'transparent', cursor: 'pointer' }}>
-                <option style={{ color: 'black' }}>Type</option>
-                <option style={{ color: 'black' }}>House</option>
-                <option style={{ color: 'black' }}>Apartment</option>
-                <option style={{ color: 'black' }}>Condo</option>
-              </select>
+
+            {/* Inputs Container */}
+            <div style={{
+              background: 'var(--glass-bg)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid var(--glass-border)',
+              padding: '1rem',
+              borderRadius: '1.5rem',
+              display: 'flex',
+              gap: '0.75rem',
+              flexWrap: 'wrap',
+              boxShadow: 'var(--shadow-xl)',
+              width: '100%'
+            }}>
+              <div style={{ flex: 1, minWidth: '180px', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.1)', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <MapPin className="text-secondary" size={20} />
+                <input type="text" placeholder="Location" style={{ border: 'none', outline: 'none', width: '100%', fontSize: '1rem', color: 'white', background: 'transparent' }} />
+              </div>
+              <div style={{ flex: 1, minWidth: '140px', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.1)', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <HomeIcon className="text-secondary" size={20} />
+                <select style={{ border: 'none', outline: 'none', width: '100%', fontSize: '1rem', color: 'white', background: 'transparent', cursor: 'pointer' }}>
+                  <option style={{ color: 'black' }}>Type</option>
+                  <option style={{ color: 'black' }}>House</option>
+                  <option style={{ color: 'black' }}>Apartment</option>
+                  <option style={{ color: 'black' }}>Condo</option>
+                </select>
+              </div>
+              <div style={{ flex: 1, minWidth: '140px', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.1)', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <DollarSign className="text-secondary" size={20} />
+                <select style={{ border: 'none', outline: 'none', width: '100%', fontSize: '1rem', color: 'white', background: 'transparent', cursor: 'pointer' }}>
+                  <option style={{ color: 'black' }}>Price</option>
+                  <option style={{ color: 'black' }}>₹50L - ₹1 Cr</option>
+                  <option style={{ color: 'black' }}>₹1 Cr - ₹3 Cr</option>
+                  <option style={{ color: 'black' }}>₹3 Cr+</option>
+                </select>
+              </div>
+              <Button size="lg" className="btn-primary" style={{ minWidth: '120px', borderRadius: '1rem' }} onClick={() => window.location.href = '/properties'}>Search</Button>
             </div>
-            <div style={{ flex: 1, minWidth: '140px', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.1)', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)' }}>
-              <DollarSign className="text-secondary" size={20} />
-              <select style={{ border: 'none', outline: 'none', width: '100%', fontSize: '1rem', color: 'white', background: 'transparent', cursor: 'pointer' }}>
-                <option style={{ color: 'black' }}>Price</option>
-                <option style={{ color: 'black' }}>₹50L - ₹1 Cr</option>
-                <option style={{ color: 'black' }}>₹1 Cr - ₹3 Cr</option>
-                <option style={{ color: 'black' }}>₹3 Cr+</option>
-              </select>
+          </div>
+        </div>
+      </section>
+
+      {/* AI Features Section */}
+      <section style={{ padding: '4rem 0', position: 'relative', zIndex: 20, background: 'var(--background)' }}>
+        <div className="container">
+          <div className="grid-cols-1 md:grid-cols-3" style={{ display: 'grid', gap: '2rem' }}>
+            <div className="card glass hover-scale animate-slide-up delay-100" style={{ padding: '2rem', borderRadius: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border)' }}>
+              <div style={{ background: 'rgba(79, 70, 229, 0.1)', width: '3rem', height: '3rem', borderRadius: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem', color: 'var(--primary)' }}>
+                <Brain size={24} />
+              </div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '0.75rem' }}>Smart Match™</h3>
+              <p style={{ color: 'var(--muted)', lineHeight: 1.6 }}>We analyze your lifestyle preferences to find homes that truly fit you, beyond just basic filters.</p>
             </div>
-            <Button size="lg" className="btn-primary" style={{ minWidth: '120px', borderRadius: '1rem' }} onClick={() => window.location.href = '/properties'}>Search</Button>
+            <div className="card glass hover-scale animate-slide-up delay-200" style={{ padding: '2rem', borderRadius: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border)' }}>
+              <div style={{ background: 'rgba(16, 185, 129, 0.1)', width: '3rem', height: '3rem', borderRadius: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem', color: 'var(--secondary)' }}>
+                <TrendingUp size={24} />
+              </div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '0.75rem' }}>Price Prediction</h3>
+              <p style={{ color: 'var(--muted)', lineHeight: 1.6 }}>Our AI analyzes market trends to tell you if a property is priced fairly or if you should negotiate.</p>
+            </div>
+            <div className="card glass hover-scale animate-slide-up delay-300" style={{ padding: '2rem', borderRadius: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border)' }}>
+              <div style={{ background: 'rgba(245, 158, 11, 0.1)', width: '3rem', height: '3rem', borderRadius: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem', color: 'var(--accent)' }}>
+                <Zap size={24} />
+              </div>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '800', marginBottom: '0.75rem' }}>Instant Support</h3>
+              <p style={{ color: 'var(--muted)', lineHeight: 1.6 }}>Get 24/7 answers to your real estate questions from our specialized AI assistant.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -177,24 +261,36 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section style={{ padding: '5rem 0', background: 'var(--primary)', color: 'white' }}>
-        <div className="container">
-          <div className="grid-cols-2 md:grid-cols-4" style={{ display: 'grid', gap: '2rem', textAlign: 'center' }}>
-            <div>
-              <div style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '0.5rem' }}>{stats.propertiesSold}</div>
-              <div style={{ opacity: 0.9 }}>Properties Sold</div>
+      <section style={{ padding: '4rem 0', background: 'var(--background)' }}>
+        <div className="container" style={{ position: 'relative', zIndex: 10 }}>
+          <div className="grid-cols-2 md:grid-cols-4" style={{ display: 'grid', gap: '2rem' }}>
+            <div className="hover-scale animate-slide-up delay-100" style={{ padding: '2rem', background: 'var(--card-bg)', borderRadius: '1.5rem', border: '1px solid var(--border)', textAlign: 'center' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem', color: 'var(--primary)' }}>
+                <HomeIcon size={40} />
+              </div>
+              <div style={{ fontSize: '3rem', fontWeight: '900', marginBottom: '0.5rem', color: 'var(--foreground)', lineHeight: 1 }}>{stats.propertiesSold}</div>
+              <div style={{ color: 'var(--muted)', fontWeight: '600' }}>Properties Sold</div>
             </div>
-            <div>
-              <div style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '0.5rem' }}>{stats.activeListings}</div>
-              <div style={{ opacity: 0.9 }}>Active Listings</div>
+            <div className="hover-scale animate-slide-up delay-200" style={{ padding: '2rem', background: 'var(--card-bg)', borderRadius: '1.5rem', border: '1px solid var(--border)', textAlign: 'center' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem', color: 'var(--secondary)' }}>
+                <Search size={40} />
+              </div>
+              <div style={{ fontSize: '3rem', fontWeight: '900', marginBottom: '0.5rem', color: 'var(--foreground)', lineHeight: 1 }}>{stats.activeListings}</div>
+              <div style={{ color: 'var(--muted)', fontWeight: '600' }}>Active Listings</div>
             </div>
-            <div>
-              <div style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '0.5rem' }}>{stats.citiesCovered}</div>
-              <div style={{ opacity: 0.9 }}>Cities Covered</div>
+            <div className="hover-scale animate-slide-up delay-300" style={{ padding: '2rem', background: 'var(--card-bg)', borderRadius: '1.5rem', border: '1px solid var(--border)', textAlign: 'center' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem', color: 'var(--accent)' }}>
+                <MapPin size={40} />
+              </div>
+              <div style={{ fontSize: '3rem', fontWeight: '900', marginBottom: '0.5rem', color: 'var(--foreground)', lineHeight: 1 }}>{stats.citiesCovered}</div>
+              <div style={{ color: 'var(--muted)', fontWeight: '600' }}>Cities Covered</div>
             </div>
-            <div>
-              <div style={{ fontSize: '3rem', fontWeight: '800', marginBottom: '0.5rem' }}>{stats.happyClients}</div>
-              <div style={{ opacity: 0.9 }}>Happy Clients</div>
+            <div className="hover-scale animate-slide-up delay-300" style={{ padding: '2rem', background: 'var(--card-bg)', borderRadius: '1.5rem', border: '1px solid var(--border)', textAlign: 'center' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem', color: '#8B5CF6' }}>
+                <Users size={40} />
+              </div>
+              <div style={{ fontSize: '3rem', fontWeight: '900', marginBottom: '0.5rem', color: 'var(--foreground)', lineHeight: 1 }}>{stats.happyClients}</div>
+              <div style={{ color: 'var(--muted)', fontWeight: '600' }}>Happy Clients</div>
             </div>
           </div>
         </div>
@@ -204,21 +300,22 @@ export default function Home() {
       <section style={{ padding: '8rem 0', background: 'var(--background)' }}>
         <div className="container">
           <div style={{
-            background: 'var(--gradient-primary)',
+            background: 'linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%)',
             borderRadius: '3rem',
             padding: '5rem 2rem',
             textAlign: 'center',
-            color: 'white',
+            color: 'var(--foreground)',
             position: 'relative',
             overflow: 'hidden',
-            boxShadow: 'var(--shadow-xl)'
+            border: '1px solid var(--border)',
+            backdropFilter: 'blur(20px)'
           }}>
             <div style={{ position: 'relative', zIndex: 10 }}>
-              <h2 style={{ fontSize: '3rem', fontWeight: '900', marginBottom: '1rem', letterSpacing: '-0.02em' }}>Subscribe to our Newsletter</h2>
-              <p style={{ fontSize: '1.25rem', opacity: 0.9, marginBottom: '3rem', maxWidth: '650px', margin: '0 auto 3rem' }}>
+              <h2 style={{ fontSize: '3rem', fontWeight: '900', marginBottom: '1rem', letterSpacing: '-0.02em', background: 'linear-gradient(to right, #818CF8, #c084fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Subscribe to our Newsletter</h2>
+              <p style={{ fontSize: '1.25rem', color: 'var(--muted)', marginBottom: '3rem', maxWidth: '650px', margin: '0 auto 3rem', lineHeight: 1.6 }}>
                 Join 10,000+ owners and buyers receiving exclusive market insights and hot property alerts.
               </p>
-              <div style={{ display: 'flex', gap: '1rem', maxWidth: '600px', margin: '0 auto', flexWrap: 'wrap', padding: '0.5rem', background: 'rgba(255,255,255,0.1)', borderRadius: '999px', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <div style={{ display: 'flex', gap: '0.5rem', maxWidth: '500px', margin: '0 auto', flexWrap: 'wrap', padding: '0.5rem', background: 'var(--input)', borderRadius: '999px', border: '1px solid var(--border)' }}>
                 <input
                   type="email"
                   placeholder="Enter your email address"
@@ -228,21 +325,21 @@ export default function Home() {
                     borderRadius: '999px',
                     border: 'none',
                     outline: 'none',
-                    minWidth: '250px',
+                    minWidth: '200px',
                     background: 'transparent',
-                    color: 'white',
-                    fontSize: '1.1rem'
+                    color: 'var(--foreground)',
+                    fontSize: '1rem'
                   }}
                 />
-                <Button style={{ background: 'white', color: 'var(--primary)', borderRadius: '999px', padding: '1rem 2.5rem', fontWeight: '900', boxShadow: 'var(--shadow-lg)' }}>
-                  Subscribe Now
+                <Button style={{ borderRadius: '999px', padding: '0.75rem 2rem', fontWeight: '700', boxShadow: 'none' }}>
+                  Subscribe
                 </Button>
               </div>
             </div>
 
             {/* Decorative circles */}
-            <div style={{ position: 'absolute', top: '-50%', left: '-10%', width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)' }}></div>
-            <div style={{ position: 'absolute', bottom: '-50%', right: '-10%', width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)' }}></div>
+            <div style={{ position: 'absolute', top: '-50%', left: '-10%', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%)', filter: 'blur(40px)' }}></div>
+            <div style={{ position: 'absolute', bottom: '-50%', right: '-10%', width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%)', filter: 'blur(40px)' }}></div>
           </div>
         </div>
       </section>

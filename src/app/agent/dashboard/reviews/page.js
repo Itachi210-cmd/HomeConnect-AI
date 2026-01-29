@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from 'react';
 import { Star, TrendingUp, ThumbsUp, MessageCircle, AlertCircle, Clock, UserCheck, Activity } from 'lucide-react';
 import FadeIn from '@/components/FadeIn';

@@ -7,10 +7,10 @@ export default function LeadsPage() {
     const { leads, updateLeadStatus } = useLeads();
 
     const columns = [
-        { id: 'New', title: 'New Leads', color: '#3B82F6' },
-        { id: 'Contacted', title: 'Contacted', color: '#F59E0B' },
-        { id: 'Qualified', title: 'Qualified', color: '#8B5CF6' },
-        { id: 'Closed', title: 'Closed', color: '#10B981' }
+        { id: 'New', title: 'New Leads', color: '#2563EB', bg: 'rgba(37, 99, 235, 0.1)', border: 'rgba(37, 99, 235, 0.2)' }, // Blue
+        { id: 'Contacted', title: 'Contacted', color: '#D97706', bg: 'rgba(217, 119, 6, 0.1)', border: 'rgba(217, 119, 6, 0.2)' }, // Amber
+        { id: 'Qualified', title: 'Qualified', color: '#7C3AED', bg: 'rgba(124, 58, 237, 0.1)', border: 'rgba(124, 58, 237, 0.2)' }, // Violet
+        { id: 'Closed', title: 'Closed', color: '#059669', bg: 'rgba(5, 150, 105, 0.1)', border: 'rgba(5, 150, 105, 0.2)' } // Emerald
     ];
 
     const getLeadsByStatus = (status) => leads.filter(lead => lead.status === status);
@@ -21,19 +21,27 @@ export default function LeadsPage() {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', alignItems: 'start' }}>
                 {columns.map(column => (
-                    <div key={column.id} style={{ background: '#F1F5F9', borderRadius: 'var(--radius)', padding: '1rem', minHeight: '500px' }}>
+                    <div key={column.id} style={{ background: 'var(--input)', borderRadius: 'var(--radius)', padding: '1rem', minHeight: '500px', border: '1px solid var(--border)' }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '2px solid var(--border)' }}>
                             <h3 style={{ fontWeight: 'bold', color: column.color }}>{column.title}</h3>
-                            <span style={{ background: 'white', padding: '0.25rem 0.5rem', borderRadius: '999px', fontSize: '0.75rem', fontWeight: 'bold' }}>
+                            <span style={{ background: 'var(--background)', padding: '0.25rem 0.5rem', borderRadius: '999px', fontSize: '0.75rem', fontWeight: 'bold', boxShadow: 'var(--shadow-sm)' }}>
                                 {getLeadsByStatus(column.id).length}
                             </span>
                         </div>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                             {getLeadsByStatus(column.id).map(lead => (
-                                <div key={lead.id} className="card" style={{ padding: '1rem', background: 'white', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+                                <div key={lead.id} className="card" style={{
+                                    padding: '1rem',
+                                    background: column.bg,
+                                    border: `1px solid ${column.border}`,
+                                    borderRadius: '12px',
+                                    boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
+                                    transition: 'transform 0.2s',
+                                    cursor: 'grab'
+                                }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#E2E8F0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--background)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border)' }}>
                                             <User size={16} />
                                         </div>
                                         <div>

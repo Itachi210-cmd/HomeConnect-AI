@@ -51,7 +51,15 @@ export async function POST(request) {
         return NextResponse.json({ message: reply });
 
     } catch (error) {
-        console.error("AI Chat Error:", error);
-        return NextResponse.json({ error: "Failed to process chat" }, { status: 500 });
+        console.error("AI Chat Error Details:", {
+            message: error.message,
+            stack: error.stack,
+            cause: error.cause,
+            apiKeyPresent: !!process.env.OPENROUTER_API_KEY
+        });
+        return NextResponse.json({
+            error: "Failed to process chat",
+            details: error.message
+        }, { status: 500 });
     }
 }

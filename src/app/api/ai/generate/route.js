@@ -36,7 +36,7 @@ export async function POST(request) {
     `;
 
         const completion = await openai.chat.completions.create({
-            model: "google/gemini-2.0-flash-exp:free", // Use a free/cheap model via OpenRouter
+            model: "microsoft/phi-3-mini-128k-instruct:free", // Use a more reliable free model
             messages: [
                 { role: "system", content: "You are a helpful real estate assistant." },
                 { role: "user", content: prompt }
@@ -48,7 +48,15 @@ export async function POST(request) {
         return NextResponse.json({ description: generatedText });
 
     } catch (error) {
-        console.error("AI Generation Error:", error);
-        return NextResponse.json({ error: "Failed to generate description" }, { status: 500 });
+        console.error("AI Generation Error Details:", {
+            message: error.message,
+            stack: error.stack,
+            cause: error.cause,
+            apiKeyPresent: !!process.env.OPENROUTER_API_KEY
+        });
+        return NextResponse.json({
+            error: "Failed to generate description",
+            details: error.message
+        }, { status: 500 });
     }
 }

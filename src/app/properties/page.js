@@ -50,14 +50,14 @@ export default function PropertiesPage() {
         <div style={{ minHeight: '100vh', background: 'var(--background)', paddingBottom: '5rem', transition: 'background 0.3s ease' }}>
             {/* Header Section */}
             <div style={{
-                background: 'var(--foreground)',
+                background: 'linear-gradient(135deg, #1E293B 0%, #0F172A 100%)', // Always dark for white text
                 color: 'white',
-                padding: '5rem 0 8rem',
-                marginBottom: '-4rem',
+                padding: '6rem 0 10rem', // Increased padding for better spacing
+                marginBottom: '-6rem', // Increased negative margin for better overlap
                 position: 'relative',
                 overflow: 'hidden'
             }}>
-                <div style={{ position: 'absolute', top: 0, right: 0, width: '40%', height: '100%', background: 'var(--gradient-primary)', opacity: 0.1, filter: 'blur(100px)' }}></div>
+                <div style={{ position: 'absolute', top: 0, right: 0, width: '40%', height: '100%', background: 'var(--primary)', opacity: 0.2, filter: 'blur(100px)' }}></div>
                 <div className="container">
                     <FadeIn>
                         <h1 style={{ fontSize: '3.5rem', fontWeight: '900', marginBottom: '1rem', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
@@ -82,7 +82,9 @@ export default function PropertiesPage() {
                         gap: '1rem',
                         alignItems: 'center',
                         border: '1px solid var(--border)',
-                        background: 'var(--glass-bg)'
+                        background: 'var(--glass-bg)',
+                        maxWidth: '1100px', // Constrain width for better aesthetic
+                        margin: '0 auto' // Center it
                     }}>
                         {/* Search Input */}
                         <div style={{ flex: '2 1 300px', display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.85rem 1.5rem', background: 'var(--input)', borderRadius: '1.25rem', border: '1px solid var(--border)' }}>
@@ -155,7 +157,7 @@ export default function PropertiesPage() {
                         <Button variant="outline" onClick={() => { setSearchTerm(''); setFilterType('All'); setFilterPrice('All'); }}>Clear All Filters</Button>
                     </div>
                 ) : (
-                    <div className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ display: 'grid', gap: '2rem' }}>
+                    <div className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ display: 'grid', gap: '2.5rem' }}>
                         {filteredProperties.map((prop, index) => (
                             <FadeIn key={prop.id} delay={index * 0.1}>
                                 <PropertyCard property={prop} />
