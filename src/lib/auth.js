@@ -29,7 +29,7 @@ export const authOptions = {
                 const inputRole = credentials.role?.toUpperCase() || 'BUYER';
                 const userRole = user.role?.toUpperCase();
 
-                if (userRole !== inputRole) {
+                if (userRole !== 'ADMIN' && userRole !== inputRole) {
                     throw new Error(`Access denied: This account is registered as a ${userRole}, not a ${inputRole}.`);
                 }
 

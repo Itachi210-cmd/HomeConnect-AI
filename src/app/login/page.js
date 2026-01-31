@@ -5,7 +5,7 @@ import { User, Briefcase, ShieldCheck, Check, Star, ArrowRight } from 'lucide-re
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import FadeIn from '@/components/FadeIn';
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
@@ -53,12 +53,16 @@ export default function LoginPage() {
             }
 
             if (result.ok) {
-                // In a real app, we'd fetch the session to get the definitive role
-                // But since we just verified it on backend, we can trust the current 'role' state
-                if (role === 'admin') {
+                // Fetch the definitive session to get the actual user role from DB
+                const session = await getSession();
+                const actualRole = session?.user?.role?.toUpperCase();
+
+                if (actualRole === 'ADMIN') {
                     router.push('/admin/dashboard');
+                } else if (actualRole === 'AGENT') {
+                    router.push('/agent/dashboard');
                 } else {
-                    router.push(role === 'agent' ? '/agent/dashboard' : '/buyer/dashboard');
+                    router.push('/buyer/dashboard');
                 }
             }
         } catch (error) {
@@ -122,7 +126,7 @@ export default function LoginPage() {
 
                         {/* Role Toggle */}
                         <div style={{ display: 'flex', background: 'var(--input)', padding: '0.5rem', borderRadius: '1rem', marginBottom: '2.5rem', border: '1px solid var(--border)' }}>
-                            {['buyer', 'agent', 'admin'].map((r) => (
+                            {['buyer', 'agent'].map((r) => (
                                 <button
                                     key={r}
                                     type="button"
@@ -148,7 +152,6 @@ export default function LoginPage() {
                                 >
                                     {r === 'buyer' && <User size={14} />}
                                     {r === 'agent' && <Briefcase size={14} />}
-                                    {r === 'admin' && <ShieldCheck size={14} />}
                                     {r}
                                 </button>
                             ))}
@@ -261,11 +264,11 @@ export default function LoginPage() {
                                 borderRadius: '0.75rem',
                                 background: 'white',
                                 fontWeight: '600',
-                                color: 'var(--foreground)',
+                                color: 'black',
                                 transition: 'background 0.2s'
                             }} className="hover:bg-gray-50">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.74 1.18 0 2.21-.93 3.23-.93.63 0 2.45.41 3.24 1.51-3.02 1.8-2.52 5.43.34 6.66-.6 1.7-1.44 3.4-2.89 4.99zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.16 2.29-2.02 4.2-3.74 4.25z" />
+                                    <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.74 1.18 0 2.21-.93 3.23-.93.63 0 2.45.41 3.24 1.51-3.02 1.8-2.52 5.43.34 6.66-.6 1.7-1.44 3.4-2.89 4.99zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.16 2.29-2.02 4.2-3.74 4.25z" fill="#000000" />
                                 </svg>
                                 Apple
                             </button>
