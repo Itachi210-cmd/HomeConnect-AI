@@ -200,7 +200,7 @@ export default function Home() {
       </section>
 
       {/* AI Features Section */}
-      <section style={{ padding: '4rem 0', position: 'relative', zIndex: 20, background: 'var(--background)' }}>
+      <section style={{ padding: '4rem 0', position: 'relative', zIndex: 20, background: 'var(--bg-subtle)' }}>
         <div className="container">
           <div className="grid-cols-1 md:grid-cols-3" style={{ display: 'grid', gap: '2rem' }}>
             <div className="card glass hover-scale animate-slide-up delay-100" style={{ padding: '2rem', borderRadius: '1.5rem', background: 'var(--card-bg)', border: '1px solid var(--border)' }}>
@@ -233,7 +233,7 @@ export default function Home() {
         <div className="container">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', marginBottom: '4rem' }}>
             <div>
-              <h2 style={{ fontSize: '2.5rem', fontWeight: '900', marginBottom: '0.5rem', color: 'var(--foreground)', letterSpacing: '-0.02em' }}>Featured Properties</h2>
+              <h2 className="text-gradient" style={{ fontSize: '2.5rem', fontWeight: '900', marginBottom: '0.5rem', letterSpacing: '-0.02em', display: 'inline-block' }}>Featured Properties</h2>
               <p style={{ color: 'var(--muted)', fontSize: '1.1rem' }}>Handpicked selection of premium properties.</p>
             </div>
             <Button variant="outline" onClick={() => window.location.href = '/properties'} style={{ borderRadius: '0.75rem', fontWeight: '700' }}>
@@ -261,7 +261,7 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section style={{ padding: '4rem 0', background: 'var(--background)' }}>
+      <section style={{ padding: '4rem 0', background: 'var(--bg-subtle)' }}>
         <div className="container" style={{ position: 'relative', zIndex: 10 }}>
           <div className="grid-cols-2 md:grid-cols-4" style={{ display: 'grid', gap: '2rem' }}>
             <div className="hover-scale animate-slide-up delay-100" style={{ padding: '2rem', background: 'var(--card-bg)', borderRadius: '1.5rem', border: '1px solid var(--border)', textAlign: 'center' }}>
@@ -347,7 +347,7 @@ export default function Home() {
       {/* Testimonials */}
       <section style={{ padding: '10rem 0', background: 'var(--input)', color: 'var(--foreground)' }}>
         <div className="container" style={{ textAlign: 'center' }}>
-          <h2 style={{ fontSize: '3rem', fontWeight: '900', marginBottom: '5rem', letterSpacing: '-0.02em' }}>What Our Users Say</h2>
+          <h2 className="text-gradient" style={{ fontSize: '3rem', fontWeight: '900', marginBottom: '5rem', letterSpacing: '-0.02em', display: 'inline-block' }}>What Our Users Say</h2>
           <div className="grid-cols-1 md:grid-cols-3" style={{ display: 'grid', gap: '2.5rem' }}>
             {[
               { name: "Priya Sharma", role: "Software Engineer", text: "HomeConnect made finding my apartment in Bangalore so easy. The AI recommendations were spot on!" },
