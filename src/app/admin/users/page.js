@@ -90,20 +90,20 @@ export default function UserManagement() {
                     </div>
                 </div>
 
-                <div className="card glass overflow-hidden rounded-2xl border border-slate-200">
+                <div className="card glass overflow-hidden rounded-2xl border border-slate-200" style={{ borderColor: 'var(--border)', background: 'var(--card-bg)' }}>
                     <div className="overflow-x-auto">
                         <table className="w-full">
-                            <thead className="bg-slate-50 border-b border-slate-200">
+                            <thead style={{ background: 'var(--input)', borderBottom: '1px solid var(--border)' }}>
                                 <tr>
-                                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-500 uppercase tracking-wider">User</th>
-                                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-500 uppercase tracking-wider">Email</th>
-                                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-500 uppercase tracking-wider">Current Role</th>
-                                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-500 uppercase tracking-wider">Actions</th>
+                                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-500 uppercase tracking-wider" style={{ color: 'var(--muted)' }}>User</th>
+                                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-500 uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Email</th>
+                                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-500 uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Current Role</th>
+                                    <th className="px-6 py-4 text-left text-sm font-bold text-slate-500 uppercase tracking-wider" style={{ color: 'var(--muted)' }}>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-100">
+                            <tbody className="divide-y divide-slate-100" style={{ divideColor: 'var(--border)' }}>
                                 {filteredUsers.map((user) => (
-                                    <tr key={user.id} className="hover:bg-slate-50/50 transition-colors">
+                                    <tr key={user.id} className="hover:bg-slate-50/50 transition-colors" style={{ borderBottom: '1px solid var(--border)' }}>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-md">

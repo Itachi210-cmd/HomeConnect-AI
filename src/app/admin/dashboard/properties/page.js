@@ -95,22 +95,22 @@ export default function AdminProperties() {
 
             <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                    <thead style={{ background: '#F8FAFC', borderBottom: '1px solid var(--border)' }}>
+                    <thead style={{ background: 'var(--input)', borderBottom: '1px solid var(--border)' }}>
                         <tr>
-                            <th className="th">Property</th>
-                            <th className="th">Location</th>
-                            <th className="th">Price</th>
-                            <th className="th">Status</th>
-                            <th className="th">Agent</th>
-                            <th className="th">Actions</th>
+                            <th className="th" style={{ color: 'var(--muted)' }}>Property</th>
+                            <th className="th" style={{ color: 'var(--muted)' }}>Location</th>
+                            <th className="th" style={{ color: 'var(--muted)' }}>Price</th>
+                            <th className="th" style={{ color: 'var(--muted)' }}>Status</th>
+                            <th className="th" style={{ color: 'var(--muted)' }}>Agent</th>
+                            <th className="th" style={{ color: 'var(--muted)' }}>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {filteredProperties.length > 0 ? filteredProperties.map(prop => (
-                            <tr key={prop.id} style={{ borderBottom: '1px solid #F1F5F9' }}>
-                                <td className="td" style={{ fontWeight: '700' }}>
+                            <tr key={prop.id} style={{ borderBottom: '1px solid var(--border)' }}>
+                                <td className="td" style={{ fontWeight: '700', color: 'var(--foreground)' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                        <div style={{ width: '40px', height: '40px', borderRadius: '8px', overflow: 'hidden', background: '#F1F5F9' }}>
+                                        <div style={{ width: '40px', height: '40px', borderRadius: '8px', overflow: 'hidden', background: 'var(--input)' }}>
                                             <img
                                                 src={(Array.isArray(prop.images) ? prop.images[0] : prop.images) || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"}
                                                 onError={handleImageError}
