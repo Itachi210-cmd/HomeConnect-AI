@@ -58,9 +58,14 @@ export default function AdminDashboard() {
     return (
         <FadeIn>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                <div>
-                    <h1 style={{ fontSize: '2.5rem', fontWeight: '900', letterSpacing: '-0.02em', color: 'var(--foreground)' }}>Administrator Dashboard</h1>
-                    <p style={{ color: 'var(--muted)', fontSize: '1.1rem' }}>Global platform overview and real-time activity metrics.</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
+                    <div>
+                        <h1 style={{ fontSize: '2.5rem', fontWeight: '900', letterSpacing: '-0.02em', color: 'var(--foreground)' }}>Administrator Dashboard</h1>
+                        <p style={{ color: 'var(--muted)', fontSize: '1.1rem' }}>Global platform overview and real-time activity metrics.</p>
+                    </div>
+                    <a href="/admin/users" className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
+                        <Users size={18} /> Manage Users
+                    </a>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
